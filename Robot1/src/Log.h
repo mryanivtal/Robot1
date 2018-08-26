@@ -8,7 +8,7 @@
  */
 
 #define LOGGING_MODE				//Parameter to define if need to log to serial.  if not, comment this line
-#define SERIAL_SPEED 115200
+#define SERIAL_SPEED 115200			//Serial port comm speed.
 
 #include <Arduino.h>
 
