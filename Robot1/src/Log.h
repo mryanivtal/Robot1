@@ -40,10 +40,8 @@ Log::~Log() {
 	// TODO Auto-generated destructor stub
 }
 
-}; /* namespace Log_NS */
 
-
-void Log_NS::Log::init(void)		//Start serial if in logging mode, else do nothing
+void Log::init(void)		//Start serial if in logging mode, else do nothing
 {
 	#ifdef LOGGING_MODE			//Logging mode?
 		Serial.begin(SERIAL_SPEED);	//initiate serial
@@ -53,17 +51,19 @@ void Log_NS::Log::init(void)		//Start serial if in logging mode, else do nothing
 	#endif
 };
 
-template <class T> void Log_NS::Log::print(T s)			//print to serial if in logging mode, else do nothing
+template <class T> void Log::print(T s)			//print to serial if in logging mode, else do nothing
 {
 	#ifdef LOGGING_MODE			//Logging mode?
 		Serial.print(s);
 	#endif
 };
 
-template <class T> void Log_NS::Log::println(T s)		//println to serial if in logging mode, else do nothing
+template <class T> void Log::println(T s)		//println to serial if in logging mode, else do nothing
 {
 	#ifdef LOGGING_MODE			//Logging mode?
 		Serial.println(s);
 	#endif
 }
 
+
+}; /* namespace Log_NS */
