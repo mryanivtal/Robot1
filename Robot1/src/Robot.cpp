@@ -19,7 +19,6 @@ using namespace Log_NS;
 void setup()
 {
 	Log SerialLog;			//begin serial communication via USB for logging
-	SerialLog.println("Testing log mechanism!");
 
 }
 

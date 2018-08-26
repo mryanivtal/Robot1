@@ -35,7 +35,6 @@ Log::Log()
 {
 	// TODO Auto-generated constructor stub
 	init();
-
 };
 
 Log::~Log()
