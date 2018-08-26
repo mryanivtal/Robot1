@@ -12,10 +12,10 @@
 
 #include <Arduino.h>
 
+
 namespace Log_NS {
 
-
-//********************************************* Class header
+//********************************************* Log Class declaration - abstraction for logging
 class Log {
 public:
 	Log();
@@ -29,17 +29,19 @@ private:
 
 };
 
-//**********************************************Class functions (Templetized to match Serial input params)
-Log::Log() {
+//**********************************************Class functions implementation (Templetized to match Serial input params)
+
+Log::Log()
+{
 	// TODO Auto-generated constructor stub
 	init();
 
 };
 
-Log::~Log() {
+Log::~Log()
+{
 	// TODO Auto-generated destructor stub
 }
-
 
 void Log::init(void)		//Start serial if in logging mode, else do nothing
 {
@@ -65,5 +67,6 @@ template <class T> void Log::println(T s)		//println to serial if in logging mod
 	#endif
 }
 
+//*************************************************************************************
 
 }; /* namespace Log_NS */
