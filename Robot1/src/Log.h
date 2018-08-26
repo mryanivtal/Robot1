@@ -1,5 +1,7 @@
 /*
  * Log.h
+ * This class abstracts the Serial logging functionality for future uses
+ * the implementation is in the h file due to template imlementation
  *
  *  Created on: Aug 27, 2018
  *      Author: yaniv
