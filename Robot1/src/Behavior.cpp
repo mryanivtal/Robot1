@@ -34,8 +34,12 @@ void Behavior::setBehavior(TimebasedAction* actionListP, byte actionCountP)
 
 void Behavior::run(void)
 {
+
 	if(behaviorNextActionTime <= millis())
 	{
+		Serial.print("Behavior.run - entered if statement, time to execute an action.  millis is ");	//LOG
+		Serial.println(millis());			//LOG
+
 		nextAction->execute();
 		updateNextAction();
 		behaviorLastActionTime=millis();

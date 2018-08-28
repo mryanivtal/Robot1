@@ -9,21 +9,17 @@
 #define SRC_FTBASERIALMSGEVERYSEC_H_
 
 #include <FixedTimebasedAction.h>
-#include "Log.h"
-
-using namespace Log_NS;
 
 namespace Behavior_ns {
 
 class FTBA_SerialMsgEverySec: public FixedTimebasedAction
 {
 public:
-	FTBA_SerialMsgEverySec(unsigned long delayInMillis, Log *LP);
+	FTBA_SerialMsgEverySec(unsigned long delayInMillis);
 	~FTBA_SerialMsgEverySec();
 
 protected:
 	void doYourThing(void);
-	Log* L;
 	String msg;
 };
 
