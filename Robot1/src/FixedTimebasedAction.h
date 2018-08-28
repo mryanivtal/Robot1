@@ -25,6 +25,7 @@ protected:
 	virtual void doYourThing(void)=0;
 
 
+
 };
 
 } /* namespace Behavior_ns */

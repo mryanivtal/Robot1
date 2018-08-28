@@ -23,9 +23,9 @@ using namespace Behavior_ns;
 
 TimebasedAction* HappyBehavior[3];
 
-FTBA_SerialMsgEverySec MsgEverySec;
-FTBA_SerialMsgEverySec MsgEveryTwoSec;
-FTBA_SerialMsgEverySec MsgEveryFiveSec;
+FTBA_SerialMsgEverySec *MsgEverySec=0;
+FTBA_SerialMsgEverySec *MsgEveryTwoSec=0;
+FTBA_SerialMsgEverySec *MsgEveryFiveSec=0;
 
 Behavior timelyBlink;
 
@@ -36,18 +36,20 @@ void setup()
 	Serial.begin(115200);
 	while(!Serial);
 
-	MsgEverySec.init(1000, "1Sec");
-	MsgEveryTwoSec.init(2000, "2Sec");
-	MsgEveryFiveSec.init(5000, "1Sec");
+	MsgEverySec=new FTBA_SerialMsgEverySec;
+	MsgEveryTwoSec=new FTBA_SerialMsgEverySec;
+	MsgEveryFiveSec=new FTBA_SerialMsgEverySec;
+
+	MsgEverySec->init(1000, "1Sec");
+	MsgEveryTwoSec->init(2000, "2Sec");
+	MsgEveryFiveSec->init(5000, "1Sec");
 
 	timelyBlink.setBehavior(HappyBehavior[0], 3);
 	Serial.println("EtimelyBlink.setBehavior(HappyBehavior[0], 3) done");			//LOG
 
-
-
-	HappyBehavior[0]=&MsgEverySec;
-	HappyBehavior[1]=&MsgEveryTwoSec;
-	HappyBehavior[2]=&MsgEveryFiveSec;
+	HappyBehavior[0]=MsgEverySec;
+	HappyBehavior[1]=MsgEveryTwoSec;
+	HappyBehavior[2]=MsgEveryFiveSec;
 
 	Serial.println("Existing Setup() successfully");			//LOG
 	delay(1000);												//LOG
