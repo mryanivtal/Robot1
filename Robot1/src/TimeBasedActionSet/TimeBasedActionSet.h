@@ -31,8 +31,8 @@ protected:
 	unsigned long behaviorLastActionTime=0;		//last time an action was executed
 	unsigned long behaviorNextActionTime=0;		//next time an action should be executed
 
-	TimebasedAction** actionList=0;		//pointer to linked list of actions
-	byte actionCount=0;
+	TimebasedAction** actionList=0;		//pointer to array of pointers to TimebasedAction
+	byte actionCount=0;					// No. of active entities in array
 	TimebasedAction* nextAction=0;		//pointer to action to run next
 };
 
