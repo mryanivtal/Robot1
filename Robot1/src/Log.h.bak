@@ -25,10 +25,8 @@ public:
 	Log();
 	virtual ~Log();
 
-	void print(const char* s);
-	void println(const char* s);
-	void print(unsigned long s);
-	void println(unsigned long s);
+	template <class T> void print(T s);
+	template <class T> void println(T s);
 
 private:
 	void init(void);

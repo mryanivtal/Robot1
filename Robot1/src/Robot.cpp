@@ -22,11 +22,18 @@ using namespace Log_NS;
 
 
 //****************************************************Global variables
+Log SerialLog;			//begin serial communication via USB for logging
+
 TimebasedAction *HappyBehavior[3];
 
-FTBA_SerialMsgEverySec MsgEverySec(1000);
-FTBA_SerialMsgEverySec MsgEveryTwoSec(2000);
-FTBA_SerialMsgEverySec MsgEveryFiveSec(5000);
+String a="1sec";
+String b="2sec";
+String c="5sec";
+
+
+FTBA_SerialMsgEverySec MsgEverySec(1000, &SerialLog);
+FTBA_SerialMsgEverySec MsgEveryTwoSec(2000, &SerialLog);
+FTBA_SerialMsgEverySec MsgEveryFiveSec(5000, &SerialLog);
 
 Behavior timelyBlink(HappyBehavior[0], 3);
 
@@ -34,7 +41,6 @@ Behavior timelyBlink(HappyBehavior[0], 3);
 //****************************************************Setup
 void setup()
 {
-	Log SerialLog;			//begin serial communication via USB for logging
 
 	HappyBehavior[0]=&MsgEverySec;
 	HappyBehavior[1]=&MsgEveryTwoSec;

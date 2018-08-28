@@ -6,11 +6,16 @@
  */
 
 #include <FTBASerialMsgEverySec.h>
+#include <Log.h>
+
+using namespace Log_NS;
 
 namespace Behavior_ns {
 
-FTBA_SerialMsgEverySec::FTBA_SerialMsgEverySec(unsigned long delayInMillis) : FixedTimebasedAction(delayInMillis)
+FTBA_SerialMsgEverySec::FTBA_SerialMsgEverySec(unsigned long delayInMillis, Log* LP)
+ : FixedTimebasedAction(delayInMillis)
 {
+	 L = LP;
 }
 
 FTBA_SerialMsgEverySec::~FTBA_SerialMsgEverySec()
@@ -20,7 +25,7 @@ FTBA_SerialMsgEverySec::~FTBA_SerialMsgEverySec()
 
 void FTBA_SerialMsgEverySec::doYourThing(void)
 {
-	//TODO add serial print
+	L->println("Ping! ");
 }
 
 
