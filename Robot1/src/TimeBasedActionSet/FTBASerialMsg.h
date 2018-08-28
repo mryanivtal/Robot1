@@ -8,9 +8,10 @@
 #ifndef SRC_FTBASERIALMSG_H_
 #define SRC_FTBASERIALMSG_H_
 #include <Arduino.h>
-#include <FixedTimebasedAction.h>
 
-namespace Behavior_ns {
+#include "../TimeBasedActionSet/FixedTimebasedAction.h"
+
+namespace TimeBasedActionSet_NS {
 
 class FTBA_SerialMsg: public FixedTimebasedAction
 {

@@ -9,10 +9,10 @@
 
 
 #include <Arduino.h>
-#include "FTBASerialMsg.h"
-#include "Behavior.h"
+#include "TimeBasedActionSet/FTBASerialMsg.h"
+#include "TimeBasedActionSet/TimeBasedActionSet.h"
 
-using namespace Behavior_ns;
+using namespace TimeBasedActionSet_NS;
 
 
 //TODO: add pin defs per board according to precompiler params
@@ -26,7 +26,7 @@ FTBA_SerialMsg *MsgEverySec=0;
 FTBA_SerialMsg *MsgEveryTwoSec=0;
 FTBA_SerialMsg *MsgEveryFiveSec=0;
 
-Behavior timelyBlink;
+TimeBasedActionSet timelyBlink;
 
 
 //****************************************************Setup
@@ -43,7 +43,6 @@ void setup()
 	MsgEveryTwoSec->init(2000, "2 Sec");
 	MsgEveryFiveSec->init(5000, "5 Sec");
 
-	Serial.println("EtimelyBlink.setBehavior(HappyBehavior[0], 3) done");			//LOG
 
 	HappyBehavior[0]=MsgEverySec;
 	HappyBehavior[1]=MsgEveryTwoSec;
@@ -52,7 +51,7 @@ void setup()
 	timelyBlink.setBehavior(HappyBehavior, 3);
 
 	Serial.println("Existing Setup() successfully");								//LOG
-	delay(1000);																	//LOG
+	delay(500);																		//LOG
 }
 
 

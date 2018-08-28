@@ -8,9 +8,9 @@
 #ifndef SRC_FIXEDTIMEBASEDACTION_H_
 #define SRC_FIXEDTIMEBASEDACTION_H_
 
-#include <TimebasedAction.h>
+#include "../TimeBasedActionSet/TimebasedAction.h"
 
-namespace Behavior_ns {
+namespace TimeBasedActionSet_NS {
 
 class FixedTimebasedAction: public TimebasedAction {
 public:

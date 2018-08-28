@@ -5,9 +5,9 @@
  *      Author: yaniv
  */
 
-#include "TimebasedAction.h"
+#include "../TimeBasedActionSet/TimebasedAction.h"
 
-namespace Behavior_ns {
+namespace TimeBasedActionSet_NS {
 
 TimebasedAction::TimebasedAction()
 {

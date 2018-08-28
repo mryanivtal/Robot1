@@ -9,15 +9,16 @@
 #define SRC_BEHAVIOR_H_
 
 #include <Arduino.h>
-#include "TimebasedAction.h"
 
-namespace Behavior_ns {
+#include "../TimeBasedActionSet/TimebasedAction.h"
 
-class Behavior {
+namespace TimeBasedActionSet_NS {
+
+class TimeBasedActionSet {
 
 public:
-	Behavior();
-	virtual ~Behavior();
+	TimeBasedActionSet();
+	virtual ~TimeBasedActionSet();
 
 	void run();
 	void setBehavior(TimebasedAction** actionListP, byte actionCountP);

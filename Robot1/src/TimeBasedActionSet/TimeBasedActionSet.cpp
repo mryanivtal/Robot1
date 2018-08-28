@@ -7,20 +7,20 @@
 
 #define MAX_ULONG 4294967295		//biggest number in an unsigned long
 
-#include <Behavior.h>
+#include "../TimeBasedActionSet/TimeBasedActionSet.h"
 
-namespace Behavior_ns {
+namespace TimeBasedActionSet_NS {
 
-Behavior::Behavior()
+TimeBasedActionSet::TimeBasedActionSet()
 {
 }
 
-Behavior::~Behavior()
+TimeBasedActionSet::~TimeBasedActionSet()
 {
 	// TODO Auto-generated destructor stub
 }
 
-void Behavior::setBehavior(TimebasedAction** actionListP, byte actionCountP)
+void TimeBasedActionSet::setBehavior(TimebasedAction** actionListP, byte actionCountP)
 {
 	actionList=actionListP;
 	actionCount=actionCountP;
@@ -30,7 +30,7 @@ void Behavior::setBehavior(TimebasedAction** actionListP, byte actionCountP)
 }
 
 
-void Behavior::run(void)
+void TimeBasedActionSet::run(void)
 {
 	if(behaviorNextActionTime <= millis())
 	{
@@ -49,7 +49,7 @@ void Behavior::run(void)
 	lastRunTime=behaviorLastActionTime;
 }
 
-void Behavior::updateNextAction()
+void TimeBasedActionSet::updateNextAction()
 {
 
 //	Serial.print("Entered Behavior::updateNextAction().  millis=  ");							//LOG

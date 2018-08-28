@@ -5,12 +5,13 @@
  *      Author: yaniv
  */
 
-#include "FTBASerialMsg.h"
+#include "../TimeBasedActionSet/FTBASerialMsg.h"
 
 #include <Arduino.h>
-#include "FixedTimebasedAction.h"
 
-namespace Behavior_ns {
+#include "../TimeBasedActionSet/FixedTimebasedAction.h"
+
+namespace TimeBasedActionSet_NS {
 
 FTBA_SerialMsg::FTBA_SerialMsg()
 {

@@ -8,7 +8,7 @@
 #ifndef SRC_TIMEBASEDACTION_H_
 #define SRC_TIMEBASEDACTION_H_
 
-namespace Behavior_ns {
+namespace TimeBasedActionSet_NS {
 
 class TimebasedAction {
 public:

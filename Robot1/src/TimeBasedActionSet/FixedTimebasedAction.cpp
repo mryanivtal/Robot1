@@ -5,10 +5,11 @@
  *      Author: yaniv
  */
 
-#include <FixedTimebasedAction.h>
+#include "../TimeBasedActionSet/FixedTimebasedAction.h"
+
 #include <Arduino.h>
 
-namespace Behavior_ns {
+namespace TimeBasedActionSet_NS {
 
 FixedTimebasedAction::FixedTimebasedAction()
 {
