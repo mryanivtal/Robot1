@@ -26,7 +26,7 @@ void FTBA_SerialMsgEverySec::init(unsigned long delayInMillisP, String msgP)
 }
 void FTBA_SerialMsgEverySec::doYourThing(void)
 {
-	Serial.println("Ping! ");
+	Serial.println(msg);
 }
 
 

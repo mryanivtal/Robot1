@@ -31,8 +31,7 @@ void FixedTimebasedAction::calcNextActionTime(void)
 
 void FixedTimebasedAction::execute(void)
 {
-	Serial.println("entered FixedTimebasedAction::execute");			//LOG"
-	delay(500);															//LOG
+//	Serial.println("entered FixedTimebasedAction::execute");			//LOG"
 
 	lastActionTime=millis();
 	calcNextActionTime();

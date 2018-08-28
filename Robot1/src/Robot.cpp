@@ -40,16 +40,17 @@ void setup()
 	MsgEveryTwoSec=new FTBA_SerialMsgEverySec;
 	MsgEveryFiveSec=new FTBA_SerialMsgEverySec;
 
-	MsgEverySec->init(1000, "1Sec");
-	MsgEveryTwoSec->init(2000, "2Sec");
-	MsgEveryFiveSec->init(5000, "1Sec");
+	MsgEverySec->init(1000, "1 Sec");
+	MsgEveryTwoSec->init(2000, "2 Sec");
+	MsgEveryFiveSec->init(5000, "5 Sec");
 
-	timelyBlink.setBehavior(HappyBehavior[0], 3);
 	Serial.println("EtimelyBlink.setBehavior(HappyBehavior[0], 3) done");			//LOG
 
 	HappyBehavior[0]=MsgEverySec;
 	HappyBehavior[1]=MsgEveryTwoSec;
 	HappyBehavior[2]=MsgEveryFiveSec;
+
+	timelyBlink.setBehavior(HappyBehavior, 3);
 
 	Serial.println("Existing Setup() successfully");			//LOG
 	delay(1000);												//LOG
