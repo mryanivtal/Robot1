@@ -14,15 +14,17 @@ namespace Behavior_ns {
 
 class FixedTimebasedAction: public TimebasedAction {
 public:
-	FixedTimebasedAction(unsigned long delayInMillis);
+	FixedTimebasedAction();
 	virtual ~FixedTimebasedAction();
+	void setDelay(unsigned long delayInMillis);
 
+protected:
+	void calcNextActionTime(void);
+	unsigned long delayInMillis=0;
 	void execute(void);
 	virtual void doYourThing(void)=0;
 
-private:
-	void calcNextActionTime(void);
-	unsigned long delayInMillis=0;
+
 };
 
 } /* namespace Behavior_ns */

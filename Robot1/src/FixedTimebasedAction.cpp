@@ -10,10 +10,8 @@
 
 namespace Behavior_ns {
 
-FixedTimebasedAction::FixedTimebasedAction(unsigned long delayInMillisP)
+FixedTimebasedAction::FixedTimebasedAction()
 {
-	delayInMillis=delayInMillisP;
-	calcNextActionTime();
 }
 
 FixedTimebasedAction::~FixedTimebasedAction()
@@ -21,6 +19,11 @@ FixedTimebasedAction::~FixedTimebasedAction()
 	// TODO Auto-generated destructor stub
 }
 
+void FixedTimebasedAction::setDelay(unsigned long delayInMillisP)
+{
+	delayInMillis=delayInMillisP;
+	calcNextActionTime();
+}
 void FixedTimebasedAction::calcNextActionTime(void)
 {
 	nextActionTime=millis()+delayInMillis;
@@ -28,6 +31,9 @@ void FixedTimebasedAction::calcNextActionTime(void)
 
 void FixedTimebasedAction::execute(void)
 {
+	Serial.println("entered FixedTimebasedAction::execute");			//LOG"
+	delay(500);															//LOG
+
 	lastActionTime=millis();
 	calcNextActionTime();
 	doYourThing();

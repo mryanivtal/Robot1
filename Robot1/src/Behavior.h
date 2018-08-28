@@ -16,7 +16,7 @@ namespace Behavior_ns {
 class Behavior {
 
 public:
-	Behavior(TimebasedAction* actionListP, byte actionCountP);
+	Behavior();
 	virtual ~Behavior();
 
 	void run();

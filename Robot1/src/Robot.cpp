@@ -23,16 +23,11 @@ using namespace Behavior_ns;
 
 TimebasedAction* HappyBehavior[3];
 
-String a="1sec";
-String b="2sec";
-String c="5sec";
+FTBA_SerialMsgEverySec MsgEverySec;
+FTBA_SerialMsgEverySec MsgEveryTwoSec;
+FTBA_SerialMsgEverySec MsgEveryFiveSec;
 
-
-FTBA_SerialMsgEverySec MsgEverySec(1000);
-FTBA_SerialMsgEverySec MsgEveryTwoSec(2000);
-FTBA_SerialMsgEverySec MsgEveryFiveSec(5000);
-
-Behavior timelyBlink(HappyBehavior[0], 3);
+Behavior timelyBlink;
 
 
 //****************************************************Setup
@@ -40,6 +35,16 @@ void setup()
 {
 	Serial.begin(115200);
 	while(!Serial);
+
+	MsgEverySec.init(1000, "1Sec");
+	MsgEveryTwoSec.init(2000, "2Sec");
+	MsgEveryFiveSec.init(5000, "1Sec");
+
+	timelyBlink.setBehavior(HappyBehavior[0], 3);
+	Serial.println("EtimelyBlink.setBehavior(HappyBehavior[0], 3) done");			//LOG
+
+
+
 	HappyBehavior[0]=&MsgEverySec;
 	HappyBehavior[1]=&MsgEveryTwoSec;
 	HappyBehavior[2]=&MsgEveryFiveSec;

@@ -15,8 +15,9 @@ namespace Behavior_ns {
 class FTBA_SerialMsgEverySec: public FixedTimebasedAction
 {
 public:
-	FTBA_SerialMsgEverySec(unsigned long delayInMillis);
+	FTBA_SerialMsgEverySec();
 	~FTBA_SerialMsgEverySec();
+	void init(unsigned long delayInMillisP, String msgP);
 
 protected:
 	void doYourThing(void);

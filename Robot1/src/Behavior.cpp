@@ -11,16 +11,14 @@
 
 namespace Behavior_ns {
 
-Behavior::Behavior(TimebasedAction* actionListP, byte actionCountP)
+Behavior::Behavior()
 {
-	setBehavior(actionListP, actionCountP);
 }
 
 Behavior::~Behavior()
 {
 	// TODO Auto-generated destructor stub
 }
-
 
 void Behavior::setBehavior(TimebasedAction* actionListP, byte actionCountP)
 {
@@ -34,11 +32,11 @@ void Behavior::setBehavior(TimebasedAction* actionListP, byte actionCountP)
 
 void Behavior::run(void)
 {
-
 	if(behaviorNextActionTime <= millis())
 	{
 		Serial.print("Behavior.run - entered if statement, time to execute an action.  millis is ");	//LOG
 		Serial.println(millis());			//LOG
+		delay(500);							//LOG
 
 		nextAction->execute();
 		updateNextAction();
