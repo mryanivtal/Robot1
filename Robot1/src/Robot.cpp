@@ -53,7 +53,6 @@ void setup()
 
 	Serial.println("Existing Setup() successfully");								//LOG
 	delay(1000);																	//LOG
-
 }
 
 
