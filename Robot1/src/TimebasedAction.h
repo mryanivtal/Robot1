@@ -19,7 +19,7 @@ public:
 	virtual void execute(void)=0;				//Execute this action
 
 protected:
-	unsigned long lastActionTime=0;
+	unsigned long lastActionTime=0;				//last time this action was executed
 	unsigned long nextActionTime=0;				//next time to execute this action (in millis)
 	virtual void calcNextActionTime(void)=0;	//calculate next execution time
 };

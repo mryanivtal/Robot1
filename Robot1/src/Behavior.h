@@ -22,7 +22,7 @@ public:
 	void run();
 	void setBehavior(TimebasedAction** actionListP, byte actionCountP);
 
-private:
+protected:
 	void updateNextAction();
 
 	unsigned long startTime=0;				//time object was initiated
