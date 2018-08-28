@@ -5,7 +5,7 @@
  *      Author: yaniv
  */
 
-#define MAX_ULONG 4294967295
+#define MAX_ULONG 4294967295		//biggest number in an unsigned long
 
 #include <Behavior.h>
 
