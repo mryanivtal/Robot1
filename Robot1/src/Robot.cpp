@@ -9,7 +9,7 @@
 
 
 #include <Arduino.h>
-#include "FTBASerialMsgEverySec.h"
+#include "FTBASerialMsg.h"
 #include "TimebasedAction.h"
 #include "Behavior.h"
 
@@ -23,9 +23,9 @@ using namespace Behavior_ns;
 
 TimebasedAction* HappyBehavior[3];
 
-FTBA_SerialMsgEverySec *MsgEverySec=0;
-FTBA_SerialMsgEverySec *MsgEveryTwoSec=0;
-FTBA_SerialMsgEverySec *MsgEveryFiveSec=0;
+FTBA_SerialMsg *MsgEverySec=0;
+FTBA_SerialMsg *MsgEveryTwoSec=0;
+FTBA_SerialMsg *MsgEveryFiveSec=0;
 
 Behavior timelyBlink;
 
@@ -36,9 +36,9 @@ void setup()
 	Serial.begin(115200);
 	while(!Serial);
 
-	MsgEverySec=new FTBA_SerialMsgEverySec;
-	MsgEveryTwoSec=new FTBA_SerialMsgEverySec;
-	MsgEveryFiveSec=new FTBA_SerialMsgEverySec;
+	MsgEverySec=new FTBA_SerialMsg;
+	MsgEveryTwoSec=new FTBA_SerialMsg;
+	MsgEveryFiveSec=new FTBA_SerialMsg;
 
 	MsgEverySec->init(1000, "1 Sec");
 	MsgEveryTwoSec->init(2000, "2 Sec");

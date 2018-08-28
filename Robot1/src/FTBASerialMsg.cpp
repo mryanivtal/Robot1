@@ -5,26 +5,27 @@
  *      Author: yaniv
  */
 
+#include "FTBASerialMsg.h"
+
 #include <Arduino.h>
-#include "FTBASerialMsgEverySec.h"
 #include "FixedTimebasedAction.h"
 
 namespace Behavior_ns {
 
-FTBA_SerialMsgEverySec::FTBA_SerialMsgEverySec()
+FTBA_SerialMsg::FTBA_SerialMsg()
 {
 }
 
-FTBA_SerialMsgEverySec::~FTBA_SerialMsgEverySec()
+FTBA_SerialMsg::~FTBA_SerialMsg()
 {
 }
 
-void FTBA_SerialMsgEverySec::init(unsigned long delayInMillisP, String msgP)
+void FTBA_SerialMsg::init(unsigned long delayInMillisP, String msgP)
 {
 	setDelay(delayInMillisP);
 	msg=msgP;
 }
-void FTBA_SerialMsgEverySec::doYourThing(void)
+void FTBA_SerialMsg::doYourThing(void)
 {
 	Serial.println(msg);
 }

@@ -5,18 +5,18 @@
  *      Author: yaniv
  */
 
-#ifndef SRC_FTBASERIALMSGEVERYSEC_H_
-#define SRC_FTBASERIALMSGEVERYSEC_H_
-
+#ifndef SRC_FTBASERIALMSG_H_
+#define SRC_FTBASERIALMSG_H_
+#include <Arduino.h>
 #include <FixedTimebasedAction.h>
 
 namespace Behavior_ns {
 
-class FTBA_SerialMsgEverySec: public FixedTimebasedAction
+class FTBA_SerialMsg: public FixedTimebasedAction
 {
 public:
-	FTBA_SerialMsgEverySec();
-	~FTBA_SerialMsgEverySec();
+	FTBA_SerialMsg();
+	~FTBA_SerialMsg();
 	void init(unsigned long delayInMillisP, String msgP);
 
 protected:
@@ -26,4 +26,4 @@ protected:
 
 } /* namespace Behavior_ns */
 
-#endif /* SRC_FTBASERIALMSGEVERYSEC_H_ */
+#endif /* SRC_FTBASERIALMSG_H_ */
