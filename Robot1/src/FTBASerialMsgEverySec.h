@@ -16,7 +16,7 @@ class FTBA_SerialMsgEverySec: public FixedTimebasedAction
 {
 public:
 	FTBA_SerialMsgEverySec(unsigned long delayInMillis);
-	virtual ~FTBA_SerialMsgEverySec();
+	~FTBA_SerialMsgEverySec();
 
 	void doYourThing(void);
 };

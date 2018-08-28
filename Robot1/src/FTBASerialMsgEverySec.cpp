@@ -17,6 +17,7 @@ FTBA_SerialMsgEverySec::~FTBA_SerialMsgEverySec()
 {
 }
 
+
 void FTBA_SerialMsgEverySec::doYourThing(void)
 {
 	//TODO add serial print

@@ -9,12 +9,18 @@
 
 namespace Behavior_ns {
 
+TimebasedAction::TimebasedAction()
+{
+}
+
+TimebasedAction::~TimebasedAction()
+{
+}
 
 unsigned long TimebasedAction::getNextActionTime(void)
 {
 	return(nextActionTime);
 }
-
 
 } /* namespace Behavior_ns */
 
