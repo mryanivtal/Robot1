@@ -10,7 +10,6 @@
 
 #include <Arduino.h>
 #include "FTBASerialMsg.h"
-#include "TimebasedAction.h"
 #include "Behavior.h"
 
 using namespace Behavior_ns;
@@ -33,8 +32,8 @@ Behavior timelyBlink;
 //****************************************************Setup
 void setup()
 {
-	Serial.begin(115200);
-	while(!Serial);
+	Serial.begin(115200);															//LOG
+	while(!Serial);																	//LOG
 
 	MsgEverySec=new FTBA_SerialMsg;
 	MsgEveryTwoSec=new FTBA_SerialMsg;
@@ -52,8 +51,8 @@ void setup()
 
 	timelyBlink.setBehavior(HappyBehavior, 3);
 
-	Serial.println("Existing Setup() successfully");			//LOG
-	delay(1000);												//LOG
+	Serial.println("Existing Setup() successfully");								//LOG
+	delay(1000);																	//LOG
 
 }
 
