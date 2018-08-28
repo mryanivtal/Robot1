@@ -9,8 +9,10 @@
 
 
 #include <Arduino.h>
-#include "TimeBasedActionSet/FTBASerialMsg.h"
+#include "TimeBasedActionSet/FixedTimebasedAction.h"
 #include "TimeBasedActionSet/TimeBasedActionSet.h"
+
+#include "ActionClasses/FTBASerialWrite.h"
 
 using namespace TimeBasedActionSet_NS;
 
@@ -22,12 +24,11 @@ using namespace TimeBasedActionSet_NS;
 
 TimebasedAction* HappyBehavior[3];
 
-FTBA_SerialMsg *MsgEverySec=0;
-FTBA_SerialMsg *MsgEveryTwoSec=0;
-FTBA_SerialMsg *MsgEveryFiveSec=0;
+FTBA_SerialWrite *MsgEverySec=0;
+FTBA_SerialWrite *MsgEveryTwoSec=0;
+FTBA_SerialWrite *MsgEveryFiveSec=0;
 
 TimeBasedActionSet timelyBlink;
-
 
 //****************************************************Setup
 void setup()
@@ -35,14 +36,16 @@ void setup()
 	Serial.begin(115200);															//LOG
 	while(!Serial);																	//LOG
 
-	MsgEverySec=new FTBA_SerialMsg;
-	MsgEveryTwoSec=new FTBA_SerialMsg;
-	MsgEveryFiveSec=new FTBA_SerialMsg;
+	MsgEverySec=new FTBA_SerialWrite;
+	MsgEveryTwoSec=new FTBA_SerialWrite;
+	MsgEveryFiveSec=new FTBA_SerialWrite;
 
-	MsgEverySec->init(1000, "1 Sec");
-	MsgEveryTwoSec->init(2000, "2 Sec");
-	MsgEveryFiveSec->init(5000, "5 Sec");
-
+	MsgEverySec->setDelay(1000);
+	MsgEverySec->setMsg("1Sec");
+	MsgEveryTwoSec->setDelay(2000);
+	MsgEveryTwoSec->setMsg("2 Sec");
+	MsgEveryFiveSec->setDelay(5000);
+	MsgEveryFiveSec->setMsg("5Sec");
 
 	HappyBehavior[0]=MsgEverySec;
 	HappyBehavior[1]=MsgEveryTwoSec;

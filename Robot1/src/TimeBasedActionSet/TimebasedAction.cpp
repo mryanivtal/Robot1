@@ -22,6 +22,7 @@ unsigned long TimebasedAction::getNextActionTime(void)
 	return(nextActionTime);
 }
 
+
 } /* namespace Behavior_ns */
 
 

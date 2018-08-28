@@ -22,9 +22,6 @@ protected:
 	void calcNextActionTime(void);
 	unsigned long delayInMillis=0;
 	void execute(void);
-	virtual void doYourThing(void)=0;
-
-
 
 };
 

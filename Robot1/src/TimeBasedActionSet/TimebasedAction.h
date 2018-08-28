@@ -22,6 +22,8 @@ protected:
 	unsigned long lastActionTime=0;				//last time this action was executed
 	unsigned long nextActionTime=0;				//next time to execute this action (in millis)
 	virtual void calcNextActionTime(void)=0;	//calculate next execution time
+	virtual void doYourThing(void)=0;
+
 };
 
 } /* namespace Behavior_ns */
