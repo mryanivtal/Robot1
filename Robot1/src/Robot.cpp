@@ -17,6 +17,8 @@
 
 #include "SoftwareSerial.h"
 #include "DFRobotPlayer/DFRobotDFPlayerMini.h"
+#include "TimeBasedActionSet/TimeBasedActions/FTBAPlayMP3Track.h"
+
 
 using namespace TimeBasedActionSet_NS;
 
@@ -26,7 +28,7 @@ using namespace TimeBasedActionSet_NS;
 
 //*******************************TimebasedAction variables
 
-TimebasedAction* HappyBehavior[3];			//array of timing base-class pointers that will point to leaf classes (FTBA classes).
+TimebasedAction* HappyBehavior[4];			//array of timing base-class pointers that will point to leaf classes (FTBA classes).
 											//initialization of the FTBA classes will be done via proper leaf pointers,
 											//running them will be done from base.
 
@@ -34,13 +36,14 @@ FTBA_SerialWrite *MsgEverySec=0;			//Three FTBA class pointers
 FTBA_SerialWrite *MsgEveryTwoSec=0;
 FTBA_SerialWrite *MsgEveryFiveSec=0;
 
-TimeBasedActionSet timelyBlink;				//the class that does the timing of all action classes combined
+FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs=0;
+
+TimeBasedActionSet robotBehavior;				//the class that does the timing of all action classes combined
 
 //*******************************DFPlayer variables
 
-SoftwareSerial mySoftwareSerial(DFPLAYER_PIN1,DFPLAYER_PIN2); // RX, TX for serial comms with DFPlayer
-DFRobotDFPlayerMini myDFPlayer;
-void printDetail(uint8_t type, int value);
+SoftwareSerial DFSwSerial(DFPLAYER_PIN1,DFPLAYER_PIN2); // RX, TX for serial comms with DFPlayer
+DFRobotDFPlayerMini DFPlayer;
 
 
 //**************************************************************
@@ -63,31 +66,40 @@ void setup()
 	MsgEveryFiveSec->setDelay(5000);
 	MsgEveryFiveSec->setMsg("5Sec");
 
-	HappyBehavior[0]=MsgEverySec;			//populating the actionset array pointers with all actions in set
-	HappyBehavior[1]=MsgEveryTwoSec;
-	HappyBehavior[2]=MsgEveryFiveSec;
-
-	timelyBlink.setBehavior(HappyBehavior, 3);	//initializing the TimeBasedActionSet class to use that array
-
 
 	//***************************************Setup DFPlayer stuff***
 
-	mySoftwareSerial.begin(9600);
+	DFSwSerial.begin(9600);
 	delay(1000);
 
 	Serial.print("Initializing DFPlayer, may take 3~5 seconds)");
-	while(!myDFPlayer.begin(mySoftwareSerial))
+	while(!DFPlayer.begin(DFSwSerial))
 	{
 		Serial.print(".");
 	    delay(500);
 	}
 	Serial.println("Ready!");
 
-	myDFPlayer.volume(10);  //Set volume value. From 0 to 30
-	myDFPlayer.play(1);  //Play the first mp3
+	PlayFolder01EveryThreeSecs=new FTBA_PlayMP3Track;
+
+	PlayFolder01EveryThreeSecs->setDFPointer(&DFPlayer);				//pointer to DF instance
+	PlayFolder01EveryThreeSecs->setVolume(3);							//volume 10/30
+	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1,1,7);			//folder 01, song 001, 4 songs total
+	PlayFolder01EveryThreeSecs->setPlayMode(1);							//iterate on entire folder
+	PlayFolder01EveryThreeSecs->setDelay(4000);							//FTBA timing value in millis
+
+	//***************************************Now combine all FTBAs to one whole behavior
+
+
+	HappyBehavior[0]=MsgEverySec;			//populating the actionset array pointers with all actions in set
+	HappyBehavior[1]=MsgEveryTwoSec;
+	HappyBehavior[2]=MsgEveryFiveSec;
+	HappyBehavior[3]=PlayFolder01EveryThreeSecs;
+
+	robotBehavior.setBehavior(HappyBehavior, 4);	//initializing the TimeBasedActionSet class to use that array
+
 
 	//*********************************************************
-
 	Serial.println("Existing Setup() successfully");								//LOG
 	delay(500);																		//LOG
 }
@@ -97,7 +109,7 @@ void setup()
 //*****************************************************Loop*****
 void loop()
 {
-	timelyBlink.run();			// Now the TimeBasedActionSet executes actions in a timely manner
+	robotBehavior.run();			// Now the TimeBasedActionSet executes actions in a timely manner
 								// based on millis().
 								// The plan is to use interrupts or other input method to update the behavior array per need
 								// and then let this go on running on a different array(=different behavior).
