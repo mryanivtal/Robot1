@@ -8,7 +8,7 @@
 #ifndef SRC_FIXEDTIMEBASEDACTION_H_
 #define SRC_FIXEDTIMEBASEDACTION_H_
 
-#include "../TimeBasedActionSet/TimebasedAction.h"
+#include "TimebasedAction.h"
 
 namespace TimeBasedActionSet_NS {
 

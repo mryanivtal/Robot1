@@ -5,7 +5,7 @@
  *      Author: yaniv
  */
 
-#include "../TimeBasedActionSet/FixedTimebasedAction.h"
+#include "FixedTimebasedAction.h"
 
 #include <Arduino.h>
 

@@ -9,8 +9,8 @@
 
 
 #include <Arduino.h>
-#include "TimeBasedActionSet/TimeBasedActionSet.h"
-#include "ActionClasses/FTBASerialWrite.h"
+#include "TimeBasedActionSet/TimingClasses/TimeBasedActionSet.h"
+#include "TimeBasedActionSet/TimeBasedActions/FTBASerialWrite.h"
 
 using namespace TimeBasedActionSet_NS;
 

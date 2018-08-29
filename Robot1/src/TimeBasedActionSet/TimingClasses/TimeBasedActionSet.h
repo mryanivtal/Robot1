@@ -10,7 +10,7 @@
 
 #include <Arduino.h>
 
-#include "../TimeBasedActionSet/TimebasedAction.h"
+#include "TimebasedAction.h"
 
 namespace TimeBasedActionSet_NS {
 

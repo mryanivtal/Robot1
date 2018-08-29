@@ -8,8 +8,8 @@
 #ifndef SRC_ACTIONCLASSES_FTBASERIALWRITE_H_
 #define SRC_ACTIONCLASSES_FTBASERIALWRITE_H_
 
-#include "SerialWrite.h"
-#include "../TimeBasedActionSet/FixedTimebasedAction.h"
+#include "../ActionClasses/SerialWrite.h"
+#include "../TimingClasses/FixedTimebasedAction.h"
 
 namespace TimeBasedActionSet_NS {
 

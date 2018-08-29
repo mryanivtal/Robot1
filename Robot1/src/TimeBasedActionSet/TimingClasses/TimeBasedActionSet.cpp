@@ -7,7 +7,7 @@
 
 #define MAX_ULONG 4294967295		//biggest number in an unsigned long
 
-#include "../TimeBasedActionSet/TimeBasedActionSet.h"
+#include "TimeBasedActionSet.h"
 
 namespace TimeBasedActionSet_NS {
 
