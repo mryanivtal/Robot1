@@ -7,10 +7,16 @@
 
 #define TARGET_BOARD_NANO			//target board is Nano.  if not, comment this line
 
+#define DFPLAYER_PIN1 10
+#define DFPLAYER_PIN2 11
 
 #include <Arduino.h>
+
 #include "TimeBasedActionSet/TimingClasses/TimeBasedActionSet.h"
 #include "TimeBasedActionSet/TimeBasedActions/FTBASerialWrite.h"
+
+#include "SoftwareSerial.h"
+#include "DFRobotPlayer/DFRobotDFPlayerMini.h"
 
 using namespace TimeBasedActionSet_NS;
 
@@ -18,7 +24,7 @@ using namespace TimeBasedActionSet_NS;
 //TODO: add pin defs per board according to precompiler params
 
 
-//****************************************************Global variables
+//*******************************TimebasedAction variables
 
 TimebasedAction* HappyBehavior[3];			//array of timing base-class pointers that will point to leaf classes (FTBA classes).
 											//initialization of the FTBA classes will be done via proper leaf pointers,
@@ -30,11 +36,21 @@ FTBA_SerialWrite *MsgEveryFiveSec=0;
 
 TimeBasedActionSet timelyBlink;				//the class that does the timing of all action classes combined
 
-//****************************************************Setup
+//*******************************DFPlayer variables
+
+SoftwareSerial mySoftwareSerial(DFPLAYER_PIN1,DFPLAYER_PIN2); // RX, TX for serial comms with DFPlayer
+DFRobotDFPlayerMini myDFPlayer;
+void printDetail(uint8_t type, int value);
+
+
+//**************************************************************
+//****************************************************Setup*****
+
 void setup()
 {
-	Serial.begin(115200);															//LOG
-	while(!Serial);																	//LOG
+	Serial.begin(115200);
+	delay(1000);
+	//*******************************Setup TimebasedAction stuff***
 
 	MsgEverySec=new FTBA_SerialWrite;		//initializing FTBA (Leaf) classes, these have both function and timing
 	MsgEveryTwoSec=new FTBA_SerialWrite;
@@ -53,12 +69,32 @@ void setup()
 
 	timelyBlink.setBehavior(HappyBehavior, 3);	//initializing the TimeBasedActionSet class to use that array
 
+
+	//***************************************Setup DFPlayer stuff***
+
+	mySoftwareSerial.begin(9600);
+	delay(1000);
+
+	Serial.print("Initializing DFPlayer, may take 3~5 seconds)");
+	while(!myDFPlayer.begin(mySoftwareSerial))
+	{
+		Serial.print(".");
+	    delay(500);
+	}
+	Serial.println("Ready!");
+
+	myDFPlayer.volume(10);  //Set volume value. From 0 to 30
+	myDFPlayer.play(1);  //Play the first mp3
+
+	//*********************************************************
+
 	Serial.println("Existing Setup() successfully");								//LOG
 	delay(500);																		//LOG
 }
 
 
-//*****************************************************Loop
+//**************************************************************
+//*****************************************************Loop*****
 void loop()
 {
 	timelyBlink.run();			// Now the TimeBasedActionSet executes actions in a timely manner
