@@ -26,19 +26,23 @@ using namespace TimeBasedActionSet_NS;
 //TODO: add pin defs per board according to precompiler params
 
 
+//**************************************************** Global Variables ********************************************
+//******************************************************************************************************************
+
+
 //*******************************TimebasedAction variables
+
+FTBA_SerialWrite *MsgEverySec=0;			//Four FTBA class pointers
+FTBA_SerialWrite *MsgEveryTwoSec=0;
+FTBA_SerialWrite *MsgEveryFiveSec=0;
+FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs=0;
 
 TimebasedAction* HappyBehavior[4];			//array of timing base-class pointers that will point to leaf classes (FTBA classes).
 											//initialization of the FTBA classes will be done via proper leaf pointers,
-											//running them will be done from base.
+											//running them will be done from base.   This array represents a specific behavior,
+											//implemented by a set of timed actions
 
-FTBA_SerialWrite *MsgEverySec=0;			//Three FTBA class pointers
-FTBA_SerialWrite *MsgEveryTwoSec=0;
-FTBA_SerialWrite *MsgEveryFiveSec=0;
-
-FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs=0;
-
-TimeBasedActionSet robotBehavior;				//the class that does the timing of all action classes combined
+TimeBasedActionSet robotBehavior;			//the class that does the timing and running of the behavior (all action classes combined)
 
 //*******************************DFPlayer variables
 
@@ -46,14 +50,14 @@ SoftwareSerial DFSwSerial(DFPLAYER_PIN1,DFPLAYER_PIN2); // RX, TX for serial com
 DFRobotDFPlayerMini DFPlayer;
 
 
-//**************************************************************
-//****************************************************Setup*****
+//**************************************************** Setup ******************************************************
+//*****************************************************************************************************************
 
 void setup()
 {
 	Serial.begin(115200);
 	delay(1000);
-	//*******************************Setup TimebasedAction stuff***
+	//******************************* Setup FTBA_SerialWrite objects ***
 
 	MsgEverySec=new FTBA_SerialWrite;		//initializing FTBA (Leaf) classes, these have both function and timing
 	MsgEveryTwoSec=new FTBA_SerialWrite;
@@ -67,7 +71,7 @@ void setup()
 	MsgEveryFiveSec->setMsg("5Sec");
 
 
-	//***************************************Setup DFPlayer stuff***
+	//*************************************** Setup DFPlayer objects ***
 
 	DFSwSerial.begin(9600);
 	delay(1000);
@@ -92,21 +96,23 @@ void setup()
 
 
 	HappyBehavior[0]=MsgEverySec;			//populating the actionset array pointers with all actions in set
-	HappyBehavior[1]=MsgEveryTwoSec;
+	HappyBehavior[1]=MsgEveryTwoSec;		//Order is not important, they will be executed based on timing
 	HappyBehavior[2]=MsgEveryFiveSec;
 	HappyBehavior[3]=PlayFolder01EveryThreeSecs;
 
 	robotBehavior.setBehavior(HappyBehavior, 4);	//initializing the TimeBasedActionSet class to use that array
 
+	//********************************************************* Get out
 
-	//*********************************************************
 	Serial.println("Existing Setup() successfully");								//LOG
 	delay(500);																		//LOG
 }
 
 
-//**************************************************************
-//*****************************************************Loop*****
+//**************************************************** Loop *******************************************************
+//*****************************************************************************************************************
+
+
 void loop()
 {
 	robotBehavior.run();			// Now the TimeBasedActionSet executes actions in a timely manner
