@@ -11,6 +11,7 @@
 #define DFPLAYER_PIN2 11
 
 #include <Arduino.h>
+#include <Wire.h>
 
 #include "TimeBasedActionSet/TimingClasses/TimeBasedActionSet.h"
 #include "TimeBasedActionSet/TimeBasedActions/FTBASerialWrite.h"
@@ -19,8 +20,10 @@
 #include "DFRobotPlayer/DFRobotDFPlayerMini.h"
 #include "TimeBasedActionSet/TimeBasedActions/FTBAPlayMP3Track.h"
 
+#include "PhysicalState/AccelGyro/AccelGyro.h"
 
 using namespace TimeBasedActionSet_NS;
+using namespace PhysicalState_NS;
 
 
 //TODO: add pin defs per board according to precompiler params
@@ -52,7 +55,9 @@ DFRobotDFPlayerMini DFPlayer;
 void setup()
 {
 	Serial.begin(115200);
+	Wire.begin();
 	delay(1000);
+
 	//*******************************Setup TimebasedAction stuff***
 
 	MsgEverySec=new FTBA_SerialWrite;		//initializing FTBA (Leaf) classes, these have both function and timing
