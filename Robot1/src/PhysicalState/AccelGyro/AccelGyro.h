@@ -51,7 +51,7 @@ public:
 
 protected:
 	const int MPU_ADDR=GY521_ADDR; 			// I2C address of the MPU-6050 (HW parameter)
-	const int GYRO_CALIBRATION[] = {GY521_CALIBRATE_X, GY521_CALIBRATE_Y, GY521_CALIBRATE_Z};	//gyro calibration deltas
+	const int GYRO_CALIBRATION[3] = {GY521_CALIBRATE_X, GY521_CALIBRATE_Y, GY521_CALIBRATE_Z};	//gyro calibration deltas
 
 	int16_t accelRawData[3]; 	// vector for accelerometer raw data [x,y,z]
 	int16_t gyroRawData[3]; 	// vector for gyro raw data
@@ -60,7 +60,7 @@ protected:
 	long mvaOrientationAccel[3];       //moving average vector [x,y,z] of acceleration measurements
 
 
-	Orientation sensorOrientation=1;		//sensor orientation
+	Orientation sensorOrientation=(Orientation)1;		//sensor orientation
 	bool isTilted=0;						//is the sensor being tilted
 	bool isFlying=0;						//is the sensor under continuous high linear acceleration
 	bool isNotMoving=0;						//is the sensor put down
