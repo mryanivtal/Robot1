@@ -23,7 +23,7 @@
 #define MVA_FOR_ORIENTATION 20		//moving avg power for orientation estimation
 
 #define MVA_FOR_AT_REST 5			//moving avg power for atRest estimation
-#define DIFF_TRESHOLD_FOR_AT_REST 100	// how much value change can we attribute for noise
+#define DIFF_TRESHOLD_FOR_AT_REST 200	// how much value change can we attribute for noise
 #define CYCLES_FOR_AT_REST 4		// how many measurements with no movement before atRest updates
 
 

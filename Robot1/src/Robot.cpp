@@ -7,8 +7,11 @@
 
 #define TARGET_BOARD_NANO			//target board is Nano.  if not, comment this line
 
-#define DFPLAYER_PIN1 10
+#define DFPLAYER_PIN1 10			//DFPlayer Pins
 #define DFPLAYER_PIN2 11
+
+									//Wire (AGBoard) pins are the I2C - D4, D5, cannot change
+									//voltage input 3.3~5V for both boards
 
 #include <Arduino.h>
 #include <Wire.h>
