@@ -36,7 +36,11 @@ void loop()
 	AGBoard.sampleSensor();
 	AGBoard.updateAll();
 
-//	Serial.println((int)AGBoard.getSensorOrientation());
+	Serial.print(", getSensorOrientation()= ");
+	Serial.print((int)AGBoard.getSensorOrientation());
+	Serial.print(", atRest()= ");
+	Serial.println((int)AGBoard.isAtRest());
+
 	delay(30);
 
 
