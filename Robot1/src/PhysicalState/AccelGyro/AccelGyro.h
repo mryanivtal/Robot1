@@ -5,6 +5,9 @@
  *      Author: yaniv
  */
 
+
+// run() measurement - 2-3 millis including 3 serial writes
+
 #include <Arduino.h>
 #include <Wire.h>
 

@@ -51,6 +51,13 @@ TimeBasedActionSet robotBehavior;			//the class that does the timing and running
 SoftwareSerial DFSwSerial(DFPLAYER_PIN1,DFPLAYER_PIN2); // RX, TX for serial comms with DFPlayer
 DFRobotDFPlayerMini DFPlayer;
 
+unsigned long prevMillis=0;			//for run millis measurement, LOG
+
+
+//*******************************AccelkGyro variables
+AccelGyro AGBoard;
+
+
 
 //**************************************************** Setup ******************************************************
 //*****************************************************************************************************************
@@ -58,7 +65,6 @@ DFRobotDFPlayerMini DFPlayer;
 void setup()
 {
 	Serial.begin(115200);
-	Wire.begin();
 	delay(1000);
 	//******************************* Setup FTBA_SerialWrite objects ***
 
@@ -76,10 +82,12 @@ void setup()
 
 	//*************************************** Setup DFPlayer objects ***
 
+	Serial.println("Initializing DFSwSerial...)");
+
 	DFSwSerial.begin(9600);
 	delay(1000);
 
-	Serial.print("Initializing DFPlayer, may take 3~5 seconds)");
+	Serial.print("Initializing DFPlayer...");
 	while(!DFPlayer.begin(DFSwSerial))
 	{
 		Serial.print(".");
@@ -105,6 +113,17 @@ void setup()
 
 	robotBehavior.setBehavior(HappyBehavior, 4);	//initializing the TimeBasedActionSet class to use that array
 
+
+	//********************************************************* Setup AccelGyro parameters
+	Serial.println("Initializing Wire...");
+
+	Wire.begin();
+	delay(1000);
+
+	Serial.println("Initializing AGBoard...");
+	AGBoard.begin();			//init AccelGyro board
+
+
 	//********************************************************* Get out
 
 	Serial.println("Existing Setup() successfully");								//LOG
@@ -118,6 +137,8 @@ void setup()
 
 void loop()
 {
+
+
 	robotBehavior.run();			// Now the TimeBasedActionSet executes actions in a timely manner
 								// based on millis().
 								// The plan is to use interrupts or other input method to update the behavior array per need
@@ -129,4 +150,17 @@ void loop()
 								// The end game is an interactive doll with parallel behaviors based on light, direction, acceleration etc.
 
 
+	AGBoard.sampleSensor();		//Sample AG board sensors
+	AGBoard.updateAll();		//update all available AG conclusions based on samples
+
+	//**********************************LOG
+	Serial.print(", getSensorOrientation()= ");
+	Serial.print((int)AGBoard.getSensorOrientation());
+	Serial.print(", atRest()= ");
+	Serial.print((int)AGBoard.isAtRest());
+	Serial.print(", deltaMillis()= ");
+	Serial.print((long)(millis()-prevMillis));
+	Serial.println();
+
+	prevMillis=millis();
 }

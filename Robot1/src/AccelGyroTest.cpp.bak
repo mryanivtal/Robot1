@@ -18,6 +18,7 @@ using namespace PhysicalState_NS;
 //***************************************************** Vars
 
 AccelGyro AGBoard;
+unsigned long prevMillis=0;
 
 void setup()
 {
@@ -36,12 +37,17 @@ void loop()
 	AGBoard.sampleSensor();
 	AGBoard.updateAll();
 
+
 	Serial.print(", getSensorOrientation()= ");
 	Serial.print((int)AGBoard.getSensorOrientation());
 	Serial.print(", atRest()= ");
-	Serial.println((int)AGBoard.isAtRest());
+	Serial.print((int)AGBoard.isAtRest());
+	Serial.print(", deltaMillis()= ");
+	Serial.print((long)(millis()-prevMillis));
+	Serial.println();
 
-	delay(30);
+	prevMillis=millis();
+
 
 
 }
