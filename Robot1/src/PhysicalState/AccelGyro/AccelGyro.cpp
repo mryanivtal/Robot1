@@ -64,17 +64,76 @@ void AccelGyro::updateOrientation(void) {
 
 	  if (b>=0) c=1; else c=-1;
 	  sensorOrientation=(Orientation)((a+1)*c);
+
+//	  //***************************LOG*********************************************
+//	  for(i=0; i<3; i++) {														//LOG
+//		  Serial.print(mvaOrientationAccel[i]);									//LOG
+//		  Serial.print(",");													//LOG
+//	  }																			//LOG
+//	  Serial.print(sensorOrientation);											//LOG
+//	  Serial.println("");														//LOG
+//	  //***************************LOG*********************************************
+
+}
+
+void PhysicalState_NS::AccelGyro::updateAtRest(void) {
+	  int i;
+	  long previousVals[6];
+	  bool stillAtRest=1;
+
+
+	  for(i=0; i<3; i++) {								//Moving average for atRest estimation - accelerometer
+		  previousVals[i]=mvaAtRest[i];					//store previous value for comparison
+		  mvaAtRest[i] = (mvaAtRest[i]*(MVA_FOR_AT_REST-1) + accelRawData[i]) / MVA_FOR_AT_REST;
+
+		  if(abs(mvaAtRest[i]-previousVals[i]) > DIFF_TRESHOLD_FOR_AT_REST) 		//is the diff outside reasonable white noise levels?
+			  stillAtRest=0;
+	  }
+
+	  for(i=0; i<3; i++) {								//Moving average for atRest estimation - Gyro
+		  previousVals[i]=mvaAtRest[i+3];					//store previous value for comparison
+		  mvaAtRest[i+3] = (mvaAtRest[i+3]*(MVA_FOR_AT_REST-1) + gyroRawData[i]) / MVA_FOR_AT_REST;
+
+		  if(abs(mvaAtRest[i+3]-previousVals[i+3]) > DIFF_TRESHOLD_FOR_AT_REST) 		//is the diff outside reasonable white noise levels?
+			  stillAtRest=0;
+	  }
+
+	  if(stillAtRest==0) {
+		  atRest=0;
+		  atRestCycles=0;
+	  }
+	  else {
+		  atRestCycles+=1;
+		  if(atRestCycles >= CYCLES_FOR_AT_REST)
+			  atRest=1;
+	  }
+
+//	  //***************************LOG*********************************************
+//	  for(i=0; i<6; i++) {														//LOG
+//		  Serial.print(mvaAtRest[i]);											//LOG
+//		  Serial.print(",");													//LOG
+//	  }																			//LOG
+//	  Serial.print(stillAtRest);												//LOG
+//	  Serial.println("");														//LOG
+//	  //***************************LOG*********************************************
+
+
+}
+
+bool AccelGyro::isAtRest(void) {
+	return(atRest);
 }
 
 
-
-void AccelGyro::updateStatus(void) {
+void AccelGyro::updateAll(void) {
 	updateOrientation();
+	updateAtRest();
 
 }
 
 Orientation AccelGyro::getSensorOrientation(void) {
 	return(sensorOrientation);
 }
+
 
 } /* namespace PhysicalState_NS */

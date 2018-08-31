@@ -16,7 +16,13 @@
 #define GY521_CALIBRATE_Y -280
 #define GY521_CALIBRATE_Z -526
 
-#define MVA_FOR_ORIENTATION 20
+// treasholds and mva values - can be calibrated
+#define MVA_FOR_ORIENTATION 20		//moving avg power for orientation estimation
+
+#define MVA_FOR_AT_REST 5			//moving avg power for atRest estimation
+#define DIFF_TRESHOLD_FOR_AT_REST 20	// how much value change can we attribute for noise
+#define CYCLES_FOR_AT_REST 70		// how many measurements with no movement before atRest updates
+
 
 
 namespace PhysicalState_NS {
@@ -39,7 +45,8 @@ public:
 	void begin(void);					// init board
 	void sampleSensor(void);			//update data from sensor
 	void updateOrientation(void);		//update orientation based on sensor raw data.
-	void updateStatus(void);			//update ALL calculated params based on sensor raw data.
+	void updateAtRest(void);			// update atRest based on sensor data
+	void updateAll(void);				//update ALL calculated params based on sensor raw data.
 
 
 	Orientation getSensorOrientation(void);		//return sensor orientation
@@ -47,7 +54,7 @@ public:
 //TODO:
 //	bool isTilted(void);				//is the sensor being tilted
 //	bool isFlying(void)					//is the sensor under high linear acceleration
-//	bool isNotMoving(void);				//is the sensor put down
+	bool isAtRest(void);				//is the sensor put down
 
 protected:
 	const int MPU_ADDR=GY521_ADDR; 			// I2C address of the MPU-6050 (HW parameter)
@@ -57,13 +64,16 @@ protected:
 	int16_t gyroRawData[3]; 	// vector for gyro raw data
 	int16_t temperature=0; 		// variables for temperature data
 
-	long mvaOrientationAccel[3];       //moving average vector [x,y,z] of acceleration measurements
-
-
+	long mvaOrientationAccel[3];       //moving average vector [x,y,z] of acceleration for orientation estimation (Gravity based)
 	Orientation sensorOrientation=(Orientation)1;		//sensor orientation
-	bool isTilted=0;						//is the sensor being tilted
-	bool isFlying=0;						//is the sensor under continuous high linear acceleration
-	bool isNotMoving=0;						//is the sensor put down
+
+	long mvaAtRest[6];					//moving avg vector [accelX, accY, accZ, GyroX, GyroY, GyroZ] for at rest estimation
+	unsigned int atRestCycles=0;
+	bool atRest=1;						//is the sensor at Rest for defined no of cycles?
+
+
+	bool tilted=0;						//is the sensor being tilted
+	bool flying=0;						//is the sensor under continuous high linear acceleration
 
 };
 
