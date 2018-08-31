@@ -91,7 +91,7 @@ void PhysicalState_NS::AccelGyro::updateAtRest(void) {
 	  }
 
 	  for(i=0; i<3; i++) {								//Moving average for atRest estimation - Gyro
-		  previousVals[i]=mvaAtRest[i+3];					//store previous value for comparison
+		  previousVals[i+3]=mvaAtRest[i+3];					//store previous value for comparison
 		  mvaAtRest[i+3] = (mvaAtRest[i+3]*(MVA_FOR_AT_REST-1) + gyroRawData[i]) / MVA_FOR_AT_REST;
 
 		  if(abs(mvaAtRest[i+3]-previousVals[i+3]) > DIFF_TRESHOLD_FOR_AT_REST) 		//is the diff outside reasonable white noise levels?
