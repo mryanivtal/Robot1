@@ -5,13 +5,20 @@
  *      Author: yaniv
  */
 
-#define TARGET_BOARD_NANO			//target board is Nano.  if not, comment this line
+
+/**************************************************************************
+ * 									Pins
+ *************************************************************************/
 
 #define DFPLAYER_PIN1 10			//DFPlayer Pins
 #define DFPLAYER_PIN2 11
 
-									//Wire (AGBoard) pins are the I2C - D4, D5, cannot change
-									//voltage input 3.3~5V for both boards
+//Wire (AGBoard) pins are the I2C - D4, D5, cannot change
+//voltage input 3.3~5V for both boards
+
+/**************************************************************************
+ * 									Includes
+ *************************************************************************/
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -28,52 +35,83 @@
 using namespace TimeBasedActionSet_NS;
 using namespace PhysicalState_NS;
 
-
-//TODO: add pin defs per board according to precompiler params
-
-
-//**************************************************** Global Variables ********************************************
-//******************************************************************************************************************
-
-TimebasedAction* HappyBehavior[4];			//array of timing base-class pointers that will point to leaf classes (FTBA classes).
-											//initialization of the FTBA classes will be done via proper leaf pointers,
-											//running them will be done from base.
-
-//*******************************TimebasedAction variables
-
-FTBA_SerialWrite *MsgEverySec=0;			//Four FTBA class pointers
-FTBA_SerialWrite *MsgEveryTwoSec=0;
-FTBA_SerialWrite *MsgEveryFiveSec=0;
-FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs=0;
+/***********************************************************************************************************
+ * 									Global variables
+ **********************************************************************************************************/
 
 
-TimeBasedActionSet robotBehavior;			//the class that does the timing and running of the behavior (all action classes combined)
+TimebasedAction* HappyBehavior[4]; 	//array of timing base-class pointers that will point to leaf classes (FTBA classes).
+									//initialization of the FTBA classes will be done via proper leaf pointers,
+									//running them will be done from base.
 
-//*******************************DFPlayer variables
+/**************************************************************************
+ * 									TimebasedAction global variables
+ *************************************************************************/
 
-SoftwareSerial DFSwSerial(DFPLAYER_PIN1,DFPLAYER_PIN2); // RX, TX for serial comms with DFPlayer
+FTBA_SerialWrite *MsgEverySec = 0;			//Four FTBA class pointers
+FTBA_SerialWrite *MsgEveryTwoSec = 0;
+FTBA_SerialWrite *MsgEveryFiveSec = 0;
+FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs = 0;
+
+TimeBasedActionSet robotBehavior;//the class that does the timing and running of the behavior (all action classes combined)
+
+/**************************************************************************
+ * 									DFPlayer global variables
+ *************************************************************************/
+
+SoftwareSerial DFSwSerial(DFPLAYER_PIN1, DFPLAYER_PIN2); // RX, TX for serial comms with DFPlayer
 DFRobotDFPlayerMini DFPlayer;
 
-unsigned long prevMillis=0;			//for run millis measurement, LOG
+unsigned long prevMillis = 0;			//for run millis measurement, LOG
 
 
-//*******************************AccelkGyro variables
+/**************************************************************************
+ * 									AccelGyro global variables
+ *************************************************************************/
+
 AccelGyro AGBoard;
 
+/***********************************************************************************************************
+ * 									void Setup()
+ ***********************************************************************************************************/
 
-
-//**************************************************** Setup ******************************************************
-//*****************************************************************************************************************
-
-void setup()
-{
-	Serial.begin(115200);
+void setup() {
+	/**************************************************************************
+	 * 									Init HW devices and connections
+	 *************************************************************************/
+	Serial.begin(115200);								//Init Serial
 	delay(1000);
-	//******************************* Setup FTBA_SerialWrite objects ***
 
-	MsgEverySec=new FTBA_SerialWrite;		//initializing FTBA (Leaf) classes, these have both function and timing
-	MsgEveryTwoSec=new FTBA_SerialWrite;
-	MsgEveryFiveSec=new FTBA_SerialWrite;
+	//******************************
+
+	Serial.println("Initializing DFSwSerial...)");
+	DFSwSerial.begin(9600);								//Init Software serial for DFPlayer
+	delay(1000);
+
+	Serial.print("Initializing DFPlayer...");			//Init DFPlayer
+	while (!DFPlayer.begin(DFSwSerial)) {
+		Serial.print(".");
+		delay(500);
+	}
+	Serial.println("Ready!");
+
+	//******************************
+
+	Serial.println("Initializing Wire...");				//Init wire (I2C connection) for AcceleratorGyro and future compass
+	Wire.begin();
+	delay(1000);
+
+	Serial.println("Initializing AGBoard...");			//Init AccelGyro board
+	AGBoard.begin();			//init AccelGyro board
+
+
+	/**************************************************************************
+	 * 									SerialWrite FTBA setup
+	 *************************************************************************/
+
+	MsgEverySec = new FTBA_SerialWrite;	//initializing FTBA (Leaf) classes, these have both function and timing
+	MsgEveryTwoSec = new FTBA_SerialWrite;
+	MsgEveryFiveSec = new FTBA_SerialWrite;
 
 	MsgEverySec->setDelay(1000);			//initialize timing value
 	MsgEverySec->setMsg("1Sec");			//initializing action value
@@ -82,67 +120,46 @@ void setup()
 	MsgEveryFiveSec->setDelay(5000);
 	MsgEveryFiveSec->setMsg("5Sec");
 
+	/**************************************************************************
+	 * 									DFPlayer FTBA setup
+	 *************************************************************************/
 
-	//*************************************** Setup DFPlayer objects ***
+	PlayFolder01EveryThreeSecs = new FTBA_PlayMP3Track;
 
-	Serial.println("Initializing DFSwSerial...)");
+	PlayFolder01EveryThreeSecs->setDFPointer(&DFPlayer);//pointer to DF instance
+	PlayFolder01EveryThreeSecs->setVolume(3);					//volume 10/30
+	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1, 1, 7);//folder 01, song 001, 4 songs total
+	PlayFolder01EveryThreeSecs->setPlayMode(1);		//iterate on entire folder
+	PlayFolder01EveryThreeSecs->setDelay(4000);	//FTBA timing value in millis
 
-	DFSwSerial.begin(9600);
-	delay(1000);
+	/**************************************************************************
+	 * 				TimeBasedActionSet setup - combile all FTBAs to one behavior
+	 *************************************************************************/
 
-	Serial.print("Initializing DFPlayer...");
-	while(!DFPlayer.begin(DFSwSerial))
-	{
-		Serial.print(".");
-	    delay(500);
-	}
-	Serial.println("Ready!");
+	HappyBehavior[0] = MsgEverySec;	//populating the actionset array pointers with all actions in set
+	HappyBehavior[1] = MsgEveryTwoSec;//Order is not important, they will be executed based on timing
+	HappyBehavior[2] = MsgEveryFiveSec;
+	HappyBehavior[3] = PlayFolder01EveryThreeSecs;
 
-	PlayFolder01EveryThreeSecs=new FTBA_PlayMP3Track;
-
-	PlayFolder01EveryThreeSecs->setDFPointer(&DFPlayer);				//pointer to DF instance
-	PlayFolder01EveryThreeSecs->setVolume(3);							//volume 10/30
-	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1,1,7);			//folder 01, song 001, 4 songs total
-	PlayFolder01EveryThreeSecs->setPlayMode(1);							//iterate on entire folder
-	PlayFolder01EveryThreeSecs->setDelay(4000);							//FTBA timing value in millis
-
-	//***************************************Now combine all FTBAs to one whole behavior
+	robotBehavior.setBehavior(HappyBehavior, 4);//initializing the TimeBasedActionSet class to use that array
 
 
-	HappyBehavior[0]=MsgEverySec;			//populating the actionset array pointers with all actions in set
-	HappyBehavior[1]=MsgEveryTwoSec;		//Order is not important, they will be executed based on timing
-	HappyBehavior[2]=MsgEveryFiveSec;
-	HappyBehavior[3]=PlayFolder01EveryThreeSecs;
+	/**************************************************************************
+	 * 									Get out of Setup()
+	 *************************************************************************/
 
-	robotBehavior.setBehavior(HappyBehavior, 4);	//initializing the TimeBasedActionSet class to use that array
-
-
-	//********************************************************* Setup AccelGyro parameters
-	Serial.println("Initializing Wire...");
-
-	Wire.begin();
-	delay(1000);
-
-	Serial.println("Initializing AGBoard...");
-	AGBoard.begin();			//init AccelGyro board
-
-
-	//********************************************************* Get out
-
-	Serial.println("Existing Setup() successfully");								//LOG
-	delay(500);																		//LOG
+	Serial.println("Existing Setup() successfully");					//LOG
+	delay(500);															//LOG
 }
 
 
-//**************************************************** Loop *******************************************************
-//*****************************************************************************************************************
+/***********************************************************************************************************
+ * 									void loop()
+ ***********************************************************************************************************/
 
+void loop() {
 
-void loop()
-{
-
-
-	robotBehavior.run();			// Now the TimeBasedActionSet executes actions in a timely manner
+	robotBehavior.run();		// Now the TimeBasedActionSet executes actions in a timely manner
 								// based on millis().
 								// The plan is to use interrupts or other input method to update the behavior array per need
 								// and then let this go on running on a different array(=different behavior).
@@ -152,18 +169,23 @@ void loop()
 								// run led screens etc.) and use them with the timing classes,
 								// The end game is an interactive doll with parallel behaviors based on light, direction, acceleration etc.
 
-
 	AGBoard.sampleSensor();		//Sample AG board sensors
 	AGBoard.updateAll();		//update all available AG conclusions based on samples
 
-	//**********************************LOG
+
+
+	/**************************************************************************
+	 * 									Log to Serial
+	 *************************************************************************/
 	Serial.print(", getSensorOrientation()= ");
-	Serial.print((int)AGBoard.getSensorOrientation());
+	Serial.print((int) AGBoard.getSensorOrientation());
 	Serial.print(", atRest()= ");
-	Serial.print((int)AGBoard.isAtRest());
+	Serial.print((int) AGBoard.isAtRest());
 	Serial.print(", deltaMillis()= ");
-	Serial.print((long)(millis()-prevMillis));
+	Serial.print((long) (millis() - prevMillis));
 	Serial.println();
 
-	prevMillis=millis();
+	prevMillis = millis();
+	//*************************************************************************
+
 }
