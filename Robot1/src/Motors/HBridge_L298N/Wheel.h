@@ -31,7 +31,6 @@ protected:
 	float RPMToMmSec=0;
 	int speedInMmPerMin;
 	int wheelDiameterInMm;
-	Direction wheelDirectionWhenMotorIsFwd=FWD;
 	void setWheelSize(int diameterInMmP);
 };
 
