@@ -15,9 +15,13 @@
 #define SRC_PHYSICALSTATE_ACCELGYRO_ACCELGYRO_H_
 
 #define GY521_ADDR 0x68				// I2C address of the MPU-6050. If AD0 pin is set to HIGH, the I2C address will be 0x69
-#define GY521_CALIBRATE_X -3200		//specific board calibration numbers
-#define GY521_CALIBRATE_Y -280
-#define GY521_CALIBRATE_Z -526
+#define GY521_CALIBRATE_GYRO_X -3200		//specific board calibration numbers
+#define GY521_CALIBRATE_GYRO_Y -280
+#define GY521_CALIBRATE_GYRO_Z -526
+
+#define GY521_CALIBRATE_ACCL_X -500		//specific board calibration numbers
+#define GY521_CALIBRATE_ACCL_Y 500
+#define GY521_CALIBRATE_ACCL_Z 2500
 
 // treasholds and mva values - can be calibrated
 #define MVA_FOR_ORIENTATION 20		//moving avg power for orientation estimation
@@ -61,7 +65,9 @@ public:
 
 protected:
 	const int MPU_ADDR=GY521_ADDR; 			// I2C address of the MPU-6050 (HW parameter)
-	const int GYRO_CALIBRATION[3] = {GY521_CALIBRATE_X, GY521_CALIBRATE_Y, GY521_CALIBRATE_Z};	//gyro calibration deltas
+	const int GYRO_CALIBRATION[3] = {GY521_CALIBRATE_GYRO_X, GY521_CALIBRATE_GYRO_Y, GY521_CALIBRATE_GYRO_Z};	//gyro calibration deltas
+	const int ACCL_CALIBRATION[3] = {GY521_CALIBRATE_ACCL_X, GY521_CALIBRATE_ACCL_Y, GY521_CALIBRATE_ACCL_Z};	//Accelerometer calibration deltas
+
 
 	int16_t accelRawData[3]; 	// vector for accelerometer raw data [x,y,z]
 	int16_t gyroRawData[3]; 	// vector for gyro raw data

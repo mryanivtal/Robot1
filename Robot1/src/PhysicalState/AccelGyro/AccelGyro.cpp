@@ -43,9 +43,22 @@ void AccelGyro::sampleSensor(void) {
 		gyroRawData[i] = Wire.read() << 8 | Wire.read(); 	// reading two registers each time - gyro data
 	}
 
-	for (i = 0; i < 3; i++) {								// Calibrate gyro data
-		gyroRawData[i] += GYRO_CALIBRATION[i];
+	for (i = 0; i < 3; i++) {
+		gyroRawData[i] += GYRO_CALIBRATION[i];			// Calibrate gyro data
+		accelRawData[i] += ACCL_CALIBRATION[i];			// Calibrate accelerometer data
 	}
+
+//  //***************************LOG*********************************************
+//	for(i=0; i<3; i++) {												//LOG
+//		Serial.print(accelRawData[i]);									//LOG
+//		Serial.print(",");												//LOG
+//	}																	//LOG
+//	for(i=0; i<3; i++) {												//LOG
+//		Serial.print(gyroRawData[i]);									//LOG
+//		Serial.print(",");												//LOG
+//	}																	//LOG
+//	Serial.println();													//LOG
+//	//***************************LOG*********************************************
 
 }
 

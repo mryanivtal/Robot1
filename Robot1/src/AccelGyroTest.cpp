@@ -37,16 +37,16 @@ void loop()
 	AGBoard.sampleSensor();
 	AGBoard.updateAll();
 
-
-	Serial.print(", getSensorOrientation()= ");
-	Serial.print((int)AGBoard.getSensorOrientation());
-	Serial.print(", atRest()= ");
-	Serial.print((int)AGBoard.isAtRest());
-	Serial.print(", deltaMillis()= ");
-	Serial.print((long)(millis()-prevMillis));
-	Serial.println();
-
-	prevMillis=millis();
+//
+//	Serial.print(", getSensorOrientation()= ");					//LOG
+//	Serial.print((int)AGBoard.getSensorOrientation());			//LOG
+//	Serial.print(", atRest()= ");								//LOG
+//	Serial.print((int)AGBoard.isAtRest());						//LOG
+//	Serial.print(", deltaMillis()= ");							//LOG
+//	Serial.print((long)(millis()-prevMillis));					//LOG
+//	Serial.println();											//LOG
+//
+//	prevMillis=millis();										//LOG
 
 
 
