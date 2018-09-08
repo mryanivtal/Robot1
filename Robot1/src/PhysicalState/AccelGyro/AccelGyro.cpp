@@ -84,7 +84,7 @@ void AccelGyro::updateOrientation(void) {
 //		  Serial.print(",");													//LOG
 //	  }																			//LOG
 //	  Serial.print(sensorOrientation);											//LOG
-//	  Serial.println("");														//LOG
+//	  Serial.println();														//LOG
 //	  //***************************LOG*********************************************
 
 }

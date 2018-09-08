@@ -14,6 +14,8 @@
 #ifndef SRC_PHYSICALSTATE_ACCELGYRO_ACCELGYRO_H_
 #define SRC_PHYSICALSTATE_ACCELGYRO_ACCELGYRO_H_
 
+//*********************************************************Physical GY521 card attributes - address and calibration constants
+
 #define GY521_ADDR 0x68				// I2C address of the MPU-6050. If AD0 pin is set to HIGH, the I2C address will be 0x69
 #define GY521_CALIBRATE_GYRO_X -3200		//specific board calibration numbers
 #define GY521_CALIBRATE_GYRO_Y -280
@@ -23,12 +25,13 @@
 #define GY521_CALIBRATE_ACCL_Y 500
 #define GY521_CALIBRATE_ACCL_Z 2500
 
-// treasholds and mva values - can be calibrated
+//***********************************************SW calibration constants - treasholds and moving avg values - can be calibrated
+
 #define MVA_FOR_ORIENTATION 20		//moving avg power for orientation estimation
 
 #define MVA_FOR_AT_REST 5			//moving avg power for atRest estimation
 #define DIFF_TRESHOLD_FOR_AT_REST 200	// how much value change can we attribute for noise
-#define CYCLES_FOR_AT_REST 4		// how many measurements with no movement before atRest updates
+#define CYCLES_FOR_AT_REST 8		// how many measurements with no movement before atRest updates
 
 
 
