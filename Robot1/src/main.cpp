@@ -23,29 +23,33 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include "TimeBasedActionSet/TimingClasses/TimeBasedActionSet.h"
-#include "TimeBasedActionSet/TimeBasedActions/FTBASerialWrite.h"
+#include <TimeBasedActionSet.h>
+#include <FTBASerialWrite.h>
 
-#include "SoftwareSerial.h"
-#include "DFRobotPlayer/DFRobotDFPlayerMini.h"
-#include "TimeBasedActionSet/TimeBasedActions/FTBAPlayMP3Track.h"
+#include <SoftwareSerial.h>
+#include <DFRobotDFPlayerMini.h>
+#include <FTBAPlayMP3Track.h>
 
-#include "PhysicalState/AccelGyro/AccelGyro.h"
+#include <AccelGyro.h>
+#include <RobotMood.h>
 
 using namespace TimeBasedActionSet_NS;
 using namespace PhysicalState_NS;
+using namespace RobotMood_NS;
 
 /***********************************************************************************************************
  * 									Global variables
  **********************************************************************************************************/
 
+RobotMood robotMood;
+Mood currentMood;
 
 TimebasedAction* HappyBehavior[4]; 	//array of timing base-class pointers that will point to leaf classes (FTBA classes).
 									//initialization of the FTBA classes will be done via proper leaf pointers,
 									//running them will be done from base.
 TimebasedAction* UpsideDownBehavior[4];
-TimebasedAction* GeneralBehavior[4];
-TimebasedAction* UpsetBehavior[4];
+TimebasedAction* ExcitedBehavior[4];
+TimebasedAction* BoredBehavior[4];
 
 
 /**************************************************************************
@@ -55,8 +59,8 @@ TimebasedAction* UpsetBehavior[4];
 
 FTBA_PlayMP3Track *PlayFolder01Periodically = 0;		//"Happy behavior" MP3s
 FTBA_PlayMP3Track *PlayFolder02Periodically = 0;		//"Upside down behavior" MP3s
-FTBA_PlayMP3Track *PlayFolder03Periodically = 0;		//"General behavior" MP3s
-FTBA_PlayMP3Track *PlayFolder04Periodically = 0;		//"Upset behavior" MP3s
+FTBA_PlayMP3Track *PlayFolder03Periodically = 0;		//"Bored behavior" MP3s
+FTBA_PlayMP3Track *PlayFolder04Periodically = 0;		//"Excited behavior" MP3s
 
 TimeBasedActionSet robotBehavior;//the class that does the timing and running of the behavior (all action classes combined)
 
@@ -120,9 +124,9 @@ void setup() {
 	PlayFolder01Periodically = new FTBA_PlayMP3Track;
 	PlayFolder01Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder01Periodically->setVolume(3);					//volume 10/30
-	PlayFolder01Periodically->setFolderAndTrackToPlay(1, 1, 2);//folder 01, song 001, 2 songs total
+	PlayFolder01Periodically->setFolderAndTrackToPlay(1, 1, 1);//folder 01, song 001, 2 songs total
 	PlayFolder01Periodically->setPlayMode(1);		//iterate on entire folder
-	PlayFolder01Periodically->setDelay(8000);	//FTBA timing value in millis
+	PlayFolder01Periodically->setDelay(9000);	//FTBA timing value in millis
 
 	//Upside down
 	PlayFolder02Periodically = new FTBA_PlayMP3Track;
@@ -132,7 +136,7 @@ void setup() {
 	PlayFolder02Periodically->setPlayMode(1);		//iterate on entire folder
 	PlayFolder02Periodically->setDelay(5000);	//FTBA timing value in millis
 
-	//General
+	//Bored
 	PlayFolder03Periodically = new FTBA_PlayMP3Track;
 	PlayFolder03Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder03Periodically->setVolume(3);					//volume 10/30
@@ -140,21 +144,22 @@ void setup() {
 	PlayFolder03Periodically->setPlayMode(1);		//iterate on entire folder
 	PlayFolder03Periodically->setDelay(10000);	//FTBA timing value in millis
 
-	//Upset
-	PlayFolder01Periodically = new FTBA_PlayMP3Track;
-	PlayFolder01Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
-	PlayFolder01Periodically->setVolume(3);					//volume 10/30
-	PlayFolder01Periodically->setFolderAndTrackToPlay(4, 1, 1);//folder 01, song 001, 2 songs total
-	PlayFolder01Periodically->setPlayMode(1);		//iterate on entire folder
-	PlayFolder01Periodically->setDelay(5000);	//FTBA timing value in millis
+	//Excited
+	PlayFolder04Periodically = new FTBA_PlayMP3Track;
+	PlayFolder04Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
+	PlayFolder04Periodically->setVolume(3);					//volume 10/30
+	PlayFolder04Periodically->setFolderAndTrackToPlay(4, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder04Periodically->setPlayMode(1);		//iterate on entire folder
+	PlayFolder04Periodically->setDelay(4000);	//FTBA timing value in millis
+
 	/**************************************************************************
 	 * 				TimeBasedActionSet setup - combile all FTBAs to one behavior
 	 *************************************************************************/
 
 	HappyBehavior[0] = PlayFolder01Periodically;
 	UpsideDownBehavior[0] = PlayFolder02Periodically;
-	GeneralBehavior[0] = PlayFolder03Periodically;
-	UpsetBehavior[0] = PlayFolder04Periodically;
+	BoredBehavior[0] = PlayFolder03Periodically;
+	ExcitedBehavior[0] = PlayFolder04Periodically;
 
 	robotBehavior.setBehavior(HappyBehavior, 1);//initializing the TimeBasedActionSet class to use that array
 
@@ -174,6 +179,33 @@ void setup() {
 
 void loop() {
 
+
+
+	AGBoard.sampleSensor();		//Sample AG board sensors
+	AGBoard.updateAll();		//update all available AG conclusions based on samples
+
+	robotMood.update(AGBoard.getSensorOrientation(), AGBoard.isAtRest(), AGBoard.getTotalLinearForce()); //update robot mood
+	if(robotMood.getMoodChanged()) { 			//Was mood changed right now?
+		currentMood=robotMood.getMood();		//get current mood
+
+		switch (currentMood) {
+			case Happy:
+				robotBehavior.setBehavior(HappyBehavior, 1);
+				break;
+			case Excited:
+				robotBehavior.setBehavior(ExcitedBehavior, 1);
+				break;
+			case Bored:
+				robotBehavior.setBehavior(BoredBehavior, 1);
+				break;
+			case UpsideDown:
+				robotBehavior.setBehavior(UpsideDownBehavior, 1);
+				break;
+			default:
+		}
+	}
+
+
 	robotBehavior.run();		// Now the TimeBasedActionSet executes actions in a timely manner
 								// based on millis().
 								// The plan is to use interrupts or other input method to update the behavior array per need
@@ -183,9 +215,6 @@ void loop() {
 								// TODO: the plan is also to add many more action functions (e.g. play mp3, blink leds,
 								// run led screens etc.) and use them with the timing classes,
 								// The end game is an interactive doll with parallel behaviors based on light, direction, acceleration etc.
-
-	AGBoard.sampleSensor();		//Sample AG board sensors
-	AGBoard.updateAll();		//update all available AG conclusions based on samples
 
 
 //
