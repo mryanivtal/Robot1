@@ -48,7 +48,9 @@ TimebasedAction* HappyBehavior[4]; 	//array of timing base-class pointers that w
  * 									TimebasedAction global variables
  *************************************************************************/
 
-
+FTBA_SerialWrite *MsgEverySec = 0;			//Four FTBA class pointers
+FTBA_SerialWrite *MsgEveryTwoSec = 0;
+FTBA_SerialWrite *MsgEveryFiveSec = 0;
 FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs = 0;
 
 TimeBasedActionSet robotBehavior;//the class that does the timing and running of the behavior (all action classes combined)
@@ -103,6 +105,20 @@ void setup() {
 	AGBoard.begin();			//init AccelGyro board
 
 
+	/**************************************************************************
+	 * 									SerialWrite FTBA setup
+	 *************************************************************************/
+
+	MsgEverySec = new FTBA_SerialWrite;	//initializing FTBA (Leaf) classes, these have both function and timing
+	MsgEveryTwoSec = new FTBA_SerialWrite;
+	MsgEveryFiveSec = new FTBA_SerialWrite;
+
+	MsgEverySec->setDelay(1000);			//initialize timing value
+	MsgEverySec->setMsg("1Sec");			//initializing action value
+	MsgEveryTwoSec->setDelay(2000);
+	MsgEveryTwoSec->setMsg("2 Sec");
+	MsgEveryFiveSec->setDelay(5000);
+	MsgEveryFiveSec->setMsg("5Sec");
 
 	/**************************************************************************
 	 * 									DFPlayer FTBA setup
@@ -112,7 +128,7 @@ void setup() {
 
 	PlayFolder01EveryThreeSecs->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder01EveryThreeSecs->setVolume(3);					//volume 10/30
-	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1, 1, 4);//folder 01, song 001, 4 songs total
+	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1, 1, 7);//folder 01, song 001, 4 songs total
 	PlayFolder01EveryThreeSecs->setPlayMode(1);		//iterate on entire folder
 	PlayFolder01EveryThreeSecs->setDelay(4000);	//FTBA timing value in millis
 
@@ -120,8 +136,12 @@ void setup() {
 	 * 				TimeBasedActionSet setup - combile all FTBAs to one behavior
 	 *************************************************************************/
 
-	HappyBehavior[0] = PlayFolder01EveryThreeSecs;
-	robotBehavior.setBehavior(HappyBehavior, 1);//initializing the TimeBasedActionSet class to use that array
+	HappyBehavior[0] = MsgEverySec;	//populating the actionset array pointers with all actions in set
+	HappyBehavior[1] = MsgEveryTwoSec;//Order is not important, they will be executed based on timing
+	HappyBehavior[2] = MsgEveryFiveSec;
+	HappyBehavior[3] = PlayFolder01EveryThreeSecs;
+
+	robotBehavior.setBehavior(HappyBehavior, 4);//initializing the TimeBasedActionSet class to use that array
 
 
 	/**************************************************************************
