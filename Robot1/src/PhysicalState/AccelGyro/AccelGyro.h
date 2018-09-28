@@ -16,14 +16,16 @@
 
 //*********************************************************Physical GY521 card attributes - address and calibration constants
 
-#define GY521_ADDR 0x68				// I2C address of the MPU-6050. If AD0 pin is set to HIGH, the I2C address will be 0x69
-#define GY521_CALIBRATE_GYRO_X -3200		//specific board calibration numbers
+#define GY521_ADDR 0x68					// I2C address of the MPU-6050. If AD0 pin is set to HIGH, the I2C address will be 0x69
+#define GY521_CALIBRATE_GYRO_X -3200	//specific board calibration numbers
 #define GY521_CALIBRATE_GYRO_Y -280
 #define GY521_CALIBRATE_GYRO_Z -526
 
 #define GY521_CALIBRATE_ACCL_X -500		//specific board calibration numbers
 #define GY521_CALIBRATE_ACCL_Y 500
 #define GY521_CALIBRATE_ACCL_Z 2500
+
+#define GY521_1G_FORCE_OUTPUT 16000		//the output value of the board in 1g at rest //TODO:Test and fix const value at rest
 
 //***********************************************SW calibration constants - treasholds and moving avg values - can be calibrated
 
@@ -60,11 +62,12 @@ public:
 
 
 	Orientation getSensorOrientation(void);		//return sensor orientation
+	bool isAtRest(void);				//is the sensor put down
+	unsigned float getTotalLinearForce(void);	//returns total linear force in G across all axis
 
-//TODO:
+//TODO: add istilted and flying indicators and logic
 //	bool isTilted(void);				//is the sensor being tilted
 //	bool isFlying(void)					//is the sensor under high linear acceleration
-	bool isAtRest(void);				//is the sensor put down
 
 protected:
 	const int MPU_ADDR=GY521_ADDR; 			// I2C address of the MPU-6050 (HW parameter)
@@ -83,6 +86,7 @@ protected:
 	unsigned int atRestCycles=0;
 	bool atRest=1;						//is the sensor at Rest for defined no of cycles?
 
+	unsigned int totalLinearForce=0;
 
 	bool tilted=0;						//is the sensor being tilted
 	bool flying=0;						//is the sensor under continuous high linear acceleration

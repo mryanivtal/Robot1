@@ -89,7 +89,7 @@ void AccelGyro::updateOrientation(void) {
 
 }
 
-void PhysicalState_NS::AccelGyro::updateAtRest(void) {
+void AccelGyro::updateAtRest(void) {
 	  int i;
 	  long previousVals[6];
 	  bool stillAtRest=1;
@@ -133,6 +133,7 @@ void PhysicalState_NS::AccelGyro::updateAtRest(void) {
 
 }
 
+
 bool AccelGyro::isAtRest(void) {
 	return(atRest);
 }
@@ -141,11 +142,20 @@ bool AccelGyro::isAtRest(void) {
 void AccelGyro::updateAll(void) {
 	updateOrientation();
 	updateAtRest();
-
 }
 
 Orientation AccelGyro::getSensorOrientation(void) {
 	return(sensorOrientation);
+}
+
+unsigned float AccelGyro::getTotalLinearForce(void) {
+
+	unsigned int totalForce=0;
+
+	for(byte i=0; i<3; i++)
+		totalForce += abs(accelRawData[i] + ACCL_CALIBRATION[i]);		//sum linear force on three axis
+
+	return(totalForce / GY521_1G_FORCE_OUTPUT);
 }
 
 
