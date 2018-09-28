@@ -43,15 +43,20 @@ using namespace PhysicalState_NS;
 TimebasedAction* HappyBehavior[4]; 	//array of timing base-class pointers that will point to leaf classes (FTBA classes).
 									//initialization of the FTBA classes will be done via proper leaf pointers,
 									//running them will be done from base.
+TimebasedAction* UpsideDownBehavior[4];
+TimebasedAction* GeneralBehavior[4];
+TimebasedAction* UpsetBehavior[4];
+
 
 /**************************************************************************
  * 									TimebasedAction global variables
  *************************************************************************/
 
-FTBA_SerialWrite *MsgEverySec = 0;			//Four FTBA class pointers
-FTBA_SerialWrite *MsgEveryTwoSec = 0;
-FTBA_SerialWrite *MsgEveryFiveSec = 0;
-FTBA_PlayMP3Track *PlayFolder01EveryThreeSecs = 0;
+
+FTBA_PlayMP3Track *PlayFolder01Periodically = 0;		//"Happy behavior" MP3s
+FTBA_PlayMP3Track *PlayFolder02Periodically = 0;		//"Upside down behavior" MP3s
+FTBA_PlayMP3Track *PlayFolder03Periodically = 0;		//"General behavior" MP3s
+FTBA_PlayMP3Track *PlayFolder04Periodically = 0;		//"Upset behavior" MP3s
 
 TimeBasedActionSet robotBehavior;//the class that does the timing and running of the behavior (all action classes combined)
 
@@ -105,43 +110,53 @@ void setup() {
 	AGBoard.begin();			//init AccelGyro board
 
 
-	/**************************************************************************
-	 * 									SerialWrite FTBA setup
-	 *************************************************************************/
 
-	MsgEverySec = new FTBA_SerialWrite;	//initializing FTBA (Leaf) classes, these have both function and timing
-	MsgEveryTwoSec = new FTBA_SerialWrite;
-	MsgEveryFiveSec = new FTBA_SerialWrite;
-
-	MsgEverySec->setDelay(1000);			//initialize timing value
-	MsgEverySec->setMsg("1Sec");			//initializing action value
-	MsgEveryTwoSec->setDelay(2000);
-	MsgEveryTwoSec->setMsg("2 Sec");
-	MsgEveryFiveSec->setDelay(5000);
-	MsgEveryFiveSec->setMsg("5Sec");
 
 	/**************************************************************************
 	 * 									DFPlayer FTBA setup
 	 *************************************************************************/
 
-	PlayFolder01EveryThreeSecs = new FTBA_PlayMP3Track;
+	//Happy
+	PlayFolder01Periodically = new FTBA_PlayMP3Track;
+	PlayFolder01Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
+	PlayFolder01Periodically->setVolume(3);					//volume 10/30
+	PlayFolder01Periodically->setFolderAndTrackToPlay(1, 1, 2);//folder 01, song 001, 2 songs total
+	PlayFolder01Periodically->setPlayMode(1);		//iterate on entire folder
+	PlayFolder01Periodically->setDelay(8000);	//FTBA timing value in millis
 
-	PlayFolder01EveryThreeSecs->setDFPointer(&DFPlayer);//pointer to DF instance
-	PlayFolder01EveryThreeSecs->setVolume(3);					//volume 10/30
-	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1, 1, 7);//folder 01, song 001, 4 songs total
-	PlayFolder01EveryThreeSecs->setPlayMode(1);		//iterate on entire folder
-	PlayFolder01EveryThreeSecs->setDelay(4000);	//FTBA timing value in millis
+	//Upside down
+	PlayFolder02Periodically = new FTBA_PlayMP3Track;
+	PlayFolder02Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
+	PlayFolder02Periodically->setVolume(3);					//volume 10/30
+	PlayFolder02Periodically->setFolderAndTrackToPlay(2, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder02Periodically->setPlayMode(1);		//iterate on entire folder
+	PlayFolder02Periodically->setDelay(5000);	//FTBA timing value in millis
 
+	//General
+	PlayFolder03Periodically = new FTBA_PlayMP3Track;
+	PlayFolder03Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
+	PlayFolder03Periodically->setVolume(3);					//volume 10/30
+	PlayFolder03Periodically->setFolderAndTrackToPlay(3, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder03Periodically->setPlayMode(1);		//iterate on entire folder
+	PlayFolder03Periodically->setDelay(10000);	//FTBA timing value in millis
+
+	//Upset
+	PlayFolder01Periodically = new FTBA_PlayMP3Track;
+	PlayFolder01Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
+	PlayFolder01Periodically->setVolume(3);					//volume 10/30
+	PlayFolder01Periodically->setFolderAndTrackToPlay(4, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder01Periodically->setPlayMode(1);		//iterate on entire folder
+	PlayFolder01Periodically->setDelay(5000);	//FTBA timing value in millis
 	/**************************************************************************
 	 * 				TimeBasedActionSet setup - combile all FTBAs to one behavior
 	 *************************************************************************/
 
-	HappyBehavior[0] = MsgEverySec;	//populating the actionset array pointers with all actions in set
-	HappyBehavior[1] = MsgEveryTwoSec;//Order is not important, they will be executed based on timing
-	HappyBehavior[2] = MsgEveryFiveSec;
-	HappyBehavior[3] = PlayFolder01EveryThreeSecs;
+	HappyBehavior[0] = PlayFolder01Periodically;
+	UpsideDownBehavior[0] = PlayFolder02Periodically;
+	GeneralBehavior[0] = PlayFolder03Periodically;
+	UpsetBehavior[0] = PlayFolder04Periodically;
 
-	robotBehavior.setBehavior(HappyBehavior, 4);//initializing the TimeBasedActionSet class to use that array
+	robotBehavior.setBehavior(HappyBehavior, 1);//initializing the TimeBasedActionSet class to use that array
 
 
 	/**************************************************************************
@@ -173,19 +188,19 @@ void loop() {
 	AGBoard.updateAll();		//update all available AG conclusions based on samples
 
 
-
-	/**************************************************************************
-	 * 									Log to Serial
-	 *************************************************************************/
-	Serial.print(", getSensorOrientation()= ");
-	Serial.print((int) AGBoard.getSensorOrientation());
-	Serial.print(", atRest()= ");
-	Serial.print((int) AGBoard.isAtRest());
-	Serial.print(", deltaMillis()= ");
-	Serial.print((long) (millis() - prevMillis));
-	Serial.println();
-
-	prevMillis = millis();
-	//*************************************************************************
+//
+//	/**************************************************************************
+//	 * 									Log to Serial
+//	 *************************************************************************/
+//	Serial.print("getSensorOrientation()= ");
+//	Serial.print((int) AGBoard.getSensorOrientation());
+//	Serial.print(", atRest()= ");
+//	Serial.print((int) AGBoard.isAtRest());
+//	Serial.print(", deltaMillis()= ");
+//	Serial.print((long) (millis() - prevMillis));
+//	Serial.println();
+//
+//	prevMillis = millis();
+//	//*************************************************************************
 
 }

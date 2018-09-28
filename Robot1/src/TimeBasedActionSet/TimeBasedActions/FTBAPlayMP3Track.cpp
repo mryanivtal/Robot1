@@ -40,6 +40,7 @@ void FTBA_PlayMP3Track::setPlayMode(byte playModeP) {		//0-same track every time
 }
 
 void FTBA_PlayMP3Track::play(void) {
+
 //	Serial.println("FTBA_PlayMP3Track::play:");		//LOG
 //	Serial.print("folderNo=");											//LOG
 //	Serial.print(folderNo);												//LOG

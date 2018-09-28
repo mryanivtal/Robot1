@@ -128,7 +128,7 @@ void setup() {
 
 	PlayFolder01EveryThreeSecs->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder01EveryThreeSecs->setVolume(3);					//volume 10/30
-	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1, 1, 7);//folder 01, song 001, 4 songs total
+	PlayFolder01EveryThreeSecs->setFolderAndTrackToPlay(1, 1, 4);//folder 01, song 001, 4 songs total
 	PlayFolder01EveryThreeSecs->setPlayMode(1);		//iterate on entire folder
 	PlayFolder01EveryThreeSecs->setDelay(4000);	//FTBA timing value in millis
 
