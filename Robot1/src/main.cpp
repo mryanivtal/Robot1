@@ -217,19 +217,21 @@ void loop() {
 								// The end game is an interactive doll with parallel behaviors based on light, direction, acceleration etc.
 
 
-//
-//	/**************************************************************************
-//	 * 									Log to Serial
-//	 *************************************************************************/
-//	Serial.print("getSensorOrientation()= ");
-//	Serial.print((int) AGBoard.getSensorOrientation());
-//	Serial.print(", atRest()= ");
-//	Serial.print((int) AGBoard.isAtRest());
-//	Serial.print(", deltaMillis()= ");
-//	Serial.print((long) (millis() - prevMillis));
-//	Serial.println();
-//
-//	prevMillis = millis();
-//	//*************************************************************************
+
+	/**************************************************************************
+	 * 									Log to Serial - sensor board status
+	 *************************************************************************/
+	Serial.print("getSensorOrientation()= ");
+	Serial.print((int) AGBoard.getSensorOrientation());
+	Serial.print(", atRest()= ");
+	Serial.print((int) AGBoard.isAtRest());
+	Serial.print(", deltaMillis()= ");
+	Serial.print((long) (millis() - prevMillis));
+	Serial.print(", currentMood = ");
+	Serial.print((int) currentMood);
+	Serial.println();
+
+	prevMillis = millis();
+	//*************************************************************************
 
 }

@@ -55,7 +55,7 @@ protected:
 	unsigned long atRestTimeChanged=0;
 
 
-	unsigned float prevTotalLinearForce=0;
+	float prevTotalLinearForce=0;
 	bool totalLinearForceTrend=0;				//1 if increasing, 0 if decreasing
 
 

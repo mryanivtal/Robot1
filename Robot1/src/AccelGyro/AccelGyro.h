@@ -63,7 +63,7 @@ public:
 
 	Orientation getSensorOrientation(void);		//return sensor orientation
 	bool isAtRest(void);				//is the sensor put down
-	unsigned float getTotalLinearForce(void);	//returns total linear force in G across all axis
+	float getTotalLinearForce(void);	//returns total linear force in G across all axis
 
 //TODO: add istilted and flying indicators and logic
 //	bool isTilted(void);				//is the sensor being tilted

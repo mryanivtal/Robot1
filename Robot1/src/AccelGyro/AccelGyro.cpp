@@ -148,7 +148,7 @@ Orientation AccelGyro::getSensorOrientation(void) {
 	return(sensorOrientation);
 }
 
-unsigned float AccelGyro::getTotalLinearForce(void) {
+float AccelGyro::getTotalLinearForce(void) {
 
 	unsigned int totalForce=0;
 
