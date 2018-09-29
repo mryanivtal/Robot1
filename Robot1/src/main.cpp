@@ -124,7 +124,7 @@ void setup() {
 	PlayFolder01Periodically = new FTBA_PlayMP3Track;
 	PlayFolder01Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder01Periodically->setVolume(3);					//volume 10/30
-	PlayFolder01Periodically->setFolderAndTrackToPlay(1, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder01Periodically->setFolderAndTrackToPlay(1, 1, 3);//folder 01, song 001, 3 songs total
 	PlayFolder01Periodically->setPlayMode(1);		//iterate on entire folder
 	PlayFolder01Periodically->setDelay(9000);	//FTBA timing value in millis
 
@@ -132,7 +132,7 @@ void setup() {
 	PlayFolder02Periodically = new FTBA_PlayMP3Track;
 	PlayFolder02Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder02Periodically->setVolume(3);					//volume 10/30
-	PlayFolder02Periodically->setFolderAndTrackToPlay(2, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder02Periodically->setFolderAndTrackToPlay(2, 1, 2);//folder 01, song 001, 2 songs total
 	PlayFolder02Periodically->setPlayMode(1);		//iterate on entire folder
 	PlayFolder02Periodically->setDelay(5000);	//FTBA timing value in millis
 
@@ -140,7 +140,7 @@ void setup() {
 	PlayFolder03Periodically = new FTBA_PlayMP3Track;
 	PlayFolder03Periodically->setDFPointer(&DFPlayer);//pointer to DF instance
 	PlayFolder03Periodically->setVolume(3);					//volume 10/30
-	PlayFolder03Periodically->setFolderAndTrackToPlay(3, 1, 1);//folder 01, song 001, 2 songs total
+	PlayFolder03Periodically->setFolderAndTrackToPlay(3, 1, 2);//folder 01, song 001, 2 songs total
 	PlayFolder03Periodically->setPlayMode(1);		//iterate on entire folder
 	PlayFolder03Periodically->setDelay(10000);	//FTBA timing value in millis
 
@@ -163,10 +163,12 @@ void setup() {
 
 	robotBehavior.setBehavior(HappyBehavior, 1);//initializing the TimeBasedActionSet class to use that array
 
-
+	currentMood=robotMood.getMood();		//get current mood for LOG
 	/**************************************************************************
 	 * 									Get out of Setup()
 	 *************************************************************************/
+
+
 
 	Serial.println("Existing Setup() successfully");					//LOG
 	delay(500);															//LOG
@@ -223,6 +225,8 @@ void loop() {
 	Serial.print((int) AGBoard.getSensorOrientation());
 	Serial.print(", atRest()= ");
 	Serial.print((int) AGBoard.isAtRest());
+	Serial.print(", getTotalLinearForce()= ");
+	Serial.print(AGBoard.getTotalLinearForce());
 	Serial.print(", deltaMillis()= ");
 	Serial.print((long) (millis() - prevMillis));
 	Serial.print(", currentMood = ");

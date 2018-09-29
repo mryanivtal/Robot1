@@ -12,8 +12,8 @@
 #include "AccelGyro/AccelGyro.h"
 #include <RobotMood.h>
 
-#define MIN_TIME_IN_MOOD 2000			//Minimum time (millis) to stay in certain mood
-#define LINEAR_FORCE_TO_GET_EXCITED 3	//Min linear force to get to excited mood
+#define MIN_TIME_IN_MOOD 3000			//Minimum time (millis) to stay in certain mood
+#define LINEAR_FORCE_TO_GET_EXCITED 4	//Min linear force to get to excited mood
 #define UPSIDE_DOWN_ORIENTATION ZNeg	//sensor orientation when doll is upside down
 #define TIME_TO_GET_BORED 15000			//tIME (MILLIS) TILL THE DOLL GETS BORED
 
