@@ -9,7 +9,7 @@
 #define SRC_ROBOTMOOD_H_
 
 #include <Arduino.h>
-#include <AccelGyro.h>
+#include "AccelGyro/AccelGyro.h"
 #include <RobotMood.h>
 
 #define MIN_TIME_IN_MOOD 2000			//Minimum time (millis) to stay in certain mood
@@ -37,7 +37,7 @@ public:
 
 	Mood getMood(void);
 	bool getMoodChanged(void);
-	void update(Orientation orientation, bool atRest, unsigned float totalLinearForce);
+	void update(Orientation orientation, bool atRest, float totalLinearForce);
 
 protected:
 	Mood mood=Happy;							//Current mood

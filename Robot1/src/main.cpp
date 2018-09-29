@@ -23,14 +23,14 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#include <TimeBasedActionSet.h>
-#include <FTBASerialWrite.h>
+#include "TimeBasedActionSet/TimingClasses/TimeBasedActionSet.h"
+#include "TimeBasedActionSet/TimeBasedActions/FTBASerialWrite.h"
 
 #include <SoftwareSerial.h>
-#include <DFRobotDFPlayerMini.h>
-#include <FTBAPlayMP3Track.h>
+#include "DFRobotPlayer/DFRobotDFPlayerMini.h"
+#include "TimeBasedActionSet/TimeBasedActions/FTBAPlayMP3Track.h"
 
-#include <AccelGyro.h>
+#include "AccelGyro/AccelGyro.h"
 #include <RobotMood.h>
 
 using namespace TimeBasedActionSet_NS;
@@ -201,10 +201,8 @@ void loop() {
 			case UpsideDown:
 				robotBehavior.setBehavior(UpsideDownBehavior, 1);
 				break;
-			default:
 		}
 	}
-
 
 	robotBehavior.run();		// Now the TimeBasedActionSet executes actions in a timely manner
 								// based on millis().

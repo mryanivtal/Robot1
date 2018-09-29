@@ -26,7 +26,7 @@ bool RobotMood::getMoodChanged(void) {
 	return(moodChanged);
 }
 
-void RobotMood::update(Orientation orientationP, bool atRestP, unsigned float totalLinearForceP) {
+void RobotMood::update(Orientation orientationP, bool atRestP, float totalLinearForceP) {
 
 	if(prevOrientation != orientationP) {					//update orientation params
 		orientationChanged=1;
@@ -67,12 +67,13 @@ void RobotMood::update(Orientation orientationP, bool atRestP, unsigned float to
 				moodTimeChanged=millis();
 			}
 		}
-		else if ( (atRestP==1)	&&  	(millis()-atRestTimeChanged >= TIME_TO_GET_BORED))	//doll not moving for a long time?
+		else if ( (atRestP==1) && (millis()-atRestTimeChanged >= TIME_TO_GET_BORED)) {	//doll not moving for a long time?
 			if(mood != Bored) {								//not bored yet?
 				prevMood=mood;									//Get excited!
 				mood=Bored;
 				moodChanged=1;
 				moodTimeChanged=millis();
+			}
 		}
 
 		else if (mood != Happy) {
