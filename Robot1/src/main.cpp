@@ -5,6 +5,25 @@
  *      Author: yaniv
  */
 
+/* Connection schema for Arduino Nano:
+ * GY521 	- 	Arduino:
+ * VCC 		-	3.3V
+ * GND		-	GND
+ * SCL		-	A5
+ * SDA		-	A4
+ *
+ * DFPlayer -	Arduino
+ * VCC		-	5V
+ * RX		-	D11
+ * TX		-	D10
+ * DAC_R	-
+ * DAC_I	-
+ * SPK1		-
+ * GND		-	GND
+ * SPK2		-
+ */
+
+
 
 /**************************************************************************
  * 									Pins
@@ -88,6 +107,10 @@ void setup() {
 	/**************************************************************************
 	 * 									Init HW devices and connections
 	 *************************************************************************/
+	pinMode(`4, OUTPUT);									//Provide VIN to DFPlayer board via digital pin to overcome HW bug
+	digitalWrite(4, HIGH);
+	delay(1000);
+
 	Serial.begin(115200);								//Init Serial
 	delay(1000);
 
@@ -168,7 +191,10 @@ void setup() {
 	 * 									Get out of Setup()
 	 *************************************************************************/
 
-
+	digitalWrite(4, LOW);						//reset DFPlayer VIN pin
+	delay(100);
+	digitalWrite(4, HIGH);
+	delay(100);
 
 	Serial.println("Existing Setup() successfully");					//LOG
 	delay(500);															//LOG
