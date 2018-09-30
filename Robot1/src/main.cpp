@@ -107,9 +107,7 @@ void setup() {
 	/**************************************************************************
 	 * 									Init HW devices and connections
 	 *************************************************************************/
-	pinMode(`4, OUTPUT);									//Provide VIN to DFPlayer board via digital pin to overcome HW bug
-	digitalWrite(4, HIGH);
-	delay(1000);
+
 
 	Serial.begin(115200);								//Init Serial
 	delay(1000);
@@ -190,11 +188,6 @@ void setup() {
 	/**************************************************************************
 	 * 									Get out of Setup()
 	 *************************************************************************/
-
-	digitalWrite(4, LOW);						//reset DFPlayer VIN pin
-	delay(100);
-	digitalWrite(4, HIGH);
-	delay(100);
 
 	Serial.println("Existing Setup() successfully");					//LOG
 	delay(500);															//LOG
