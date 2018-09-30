@@ -121,7 +121,7 @@ void setup() {
 	Serial.print("Initializing DFPlayer...");			//Init DFPlayer
 	while (!DFPlayer.begin(DFSwSerial)) {
 		Serial.print(".");
-		delay(500);
+		delay(1000);
 	}
 	Serial.println("Ready!");
 
@@ -189,8 +189,11 @@ void setup() {
 	 * 									Get out of Setup()
 	 *************************************************************************/
 
+	DFPlayer.reset();
+
 	Serial.println("Existing Setup() successfully");					//LOG
-	delay(500);															//LOG
+	delay(500);
+
 }
 
 
