@@ -5,12 +5,12 @@
  *      Author: yaniv
  */
 
-/* Connection schema for Arduino Nano:
+/* Connection schema for NodeMCU:
  * GY521 	- 	Arduino:
  * VCC 		-	3.3V
  * GND		-	GND
- * SCL		-	A5
- * SDA		-	A4
+ * SCL		-	D6
+ * SDA		-	D7
  *
  * DFPlayer -	Arduino
  * VCC		-	5V
@@ -29,8 +29,10 @@
  * 									Pins
  *************************************************************************/
 
-#define DFPLAYER_PIN1 10			//DFPlayer Pins
-#define DFPLAYER_PIN2 11
+#define DFPLAYER_PIN1 5			//DFPlayer Pins
+#define DFPLAYER_PIN2 4
+
+#define OLED_RESET 0
 
 //Wire (AGBoard) pins are the I2C - D4, D5, cannot change
 //voltage input 3.3~5V for both boards
